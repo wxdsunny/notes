@@ -49,6 +49,8 @@ grammar_cjkRuby: true
 
  7. 
 
+![enter description here][10]
+
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507557450802.jpg "1507557450802.jpg"
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507557560527.jpg "1507557560527.jpg"
@@ -59,3 +61,4 @@ grammar_cjkRuby: true
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507559731814.jpg "1507559731814.jpg"
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507561539150.jpg "1507561539150.jpg"
   [9]: https://www.github.com/wxdsunny/images/raw/master/1507562725324.jpg "1507562725324.jpg"
+  [10]: http://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507563760285]]]"
