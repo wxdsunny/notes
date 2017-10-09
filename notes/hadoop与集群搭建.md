@@ -33,7 +33,13 @@ grammar_cjkRuby: true
 
   ![enter description here][7]
 
- 5. 
+ 5. 安装JDK
+  把JDK放到`/opt/Software/Java/`中,解压
+  再配置环境变量 `vim /etc/profile`在`profile`文件中追加环境变量
+
+  ![enter description here][8]
+
+ 6. 
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507557450802.jpg "1507557450802.jpg"
@@ -43,3 +49,4 @@ grammar_cjkRuby: true
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507559241598.jpg "1507559241598.jpg"
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507558940918.jpg "1507558940918.jpg"
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507559731814.jpg "1507559731814.jpg"
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507561539150.jpg "1507561539150.jpg"
