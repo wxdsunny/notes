@@ -39,7 +39,15 @@ grammar_cjkRuby: true
 
   ![enter description here][8]
 
- 6. 
+  再执行`source /etc/profile`重新加载文件
+  可以执行`java -version`查看JAVA环境是否配好
+ 6. 配置Hadoop环境变量(有可能会找不到系统配置的环境变量)
+  在`etc/hadoop`下都是Hadoop的配置文件
+  配置`hadoop-env.sh`中配置jdk
+
+  ![enter description here][9]
+
+ 7. 
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507557450802.jpg "1507557450802.jpg"
@@ -50,3 +58,4 @@ grammar_cjkRuby: true
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507558940918.jpg "1507558940918.jpg"
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507559731814.jpg "1507559731814.jpg"
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507561539150.jpg "1507561539150.jpg"
+  [9]: https://www.github.com/wxdsunny/images/raw/master/1507562725324.jpg "1507562725324.jpg"
