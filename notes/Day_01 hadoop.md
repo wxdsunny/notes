@@ -32,15 +32,49 @@ grammar_cjkRuby: true
 ![enter description here][1]
 
  2. 更改ip
- 3. ssh
-  `ssh-keygen -t rsa` 生成ssh(公钥和私钥)(为了解决每次远程操作时都要访问密码)
+
+
+## 创建集群
+
+ ### ssh
+  (1)`ssh-keygen -t rsa` 生成ssh(公钥和私钥)(为了解决每次远程操作时都要访问密码)
      公钥:给其他的公钥,其他的就可以有权限来操作,远程操作的时候就可以不用密码了
      私钥:只有自己有
-  生成的公钥和私钥在root的.ssh中(.ssh是个隐藏文件夹),然后把公钥的内容复制到authorized_keys文件中(授权列表,相当于门,而把公钥配置到权限列表中就代表这个公钥可以打开门,如果拿公钥访问的话就会先去授权列表中查看是否有这个公钥,有就直接访问,没有就会要密码)
-  
+  (2) `cp id_rsa.pub authorized_keys`
+    生成的公钥和私钥在root的.ssh中(.ssh是个隐藏文件夹),然后把公钥的内容复制到authorized_keys文件中(授权列表,相当于门,而把公钥配置到权限列表中就代表这个公钥可以打开门,如果拿公钥访问的话就会先去授权列表中查看是否有这个公钥,有就直接访问,没有就会要密码)
+  (3)`scp ~/.ssh/id_rsa.pub root@master:~/.ssh/id_rsa_slaver1.pub`
+     `scp ~/.ssh/id_rsa.pub root@master:~/.ssh/id_rsa_slaver2.pub`
+     将两个子节点的公钥拷贝到主节点上，分别在两个子节点上执行,这步就是把子节点的公钥给了主节点
+  (4)`cat id_rsa_slaver1.pub>> authorized_keys`
+     `cat id_rsa_slaver2.pub>> authorized_keys`
+     把公钥配置到授权列表中
+  (5)`scp ~/.ssh/authorized_keys root@slave1:~/.ssh/id_rsa_slaver1.pub`
+     `scp ~/.ssh/authorized_keys root@slave2:~/.ssh/id_rsa_slaver1.pub`
+     在master中把权限列表(`authorized_keys`)复制到子节点中
+  (6)在每个节点上都分别执行`ssh slaver1     ssh slaver2    ssh master` 可以正常跳转到两个节点中就成功了.
 
+ ### hadoop
+   
 
+ 1. 先把`hadoop`的压缩包放虚拟机中,然后解压,
+ 2. 配置环境变量:
+   先配置`/etc/profile`文件中的环境变量,把`hadoop`配置到环境变量中
+
+  ![enter description here][2]
+
+   再`source /etc/profile`加载一下配置文件,可以输入`hadoop`的时候有提示,证明配置Hadoop成功
+ 3. `hadoop`的配置
+    `hadoop-env.sh`:运行环境配置,`jdk`,`jvm`内存配置
+    `yarn-env.sh`:yarn的环境配置
+    `core-site.xml`:权限,文件系统,主节点
+    `hdfs-site.xml:hdfs`相关
+    `mapred-site.xml`:`mapreduce`的参数配置
+    `yarn-site.xml`:`yarn`的参数配置
+    `slaves`:子节点的配置,里面写入所有子节点的`hostname`
  4. 
+
+   
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507618366514.jpg "1507618366514.jpg"
+  [2]: https://www.github.com/wxdsunny/images/raw/master/1507625175117.jpg "1507625175117.jpg"
