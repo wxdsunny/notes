@@ -71,10 +71,77 @@ grammar_cjkRuby: true
     `mapred-site.xml`:`mapreduce`的参数配置
     `yarn-site.xml`:`yarn`的参数配置
     `slaves`:子节点的配置,里面写入所有子节点的`hostname`
- 4. 
+ 4. 配置`Hadoop`的环境
+    (1)在`hadoop-env.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`这样就不会出现找不到程序的环境变量.
+
+  ![enter description here][3]
+   
+   (2)在`yarn-evn.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`
+    
+  ![enter description here][4]
+ 5. 在`core-site.xml`中配置
+
+  ![enter description here][5]
+  
+ 
+
+ 6. 在`hdfs-site.xml`中配置
+  
+  ![enter description here][6]
+  
+  在版本新的里面没有`mapred-site.xml`,只有
+  
+  ![enter description here][7]
+  
+  则复制改个名`mapred-site.xml`然后在`mapred-site.xml`中配置:
+  
+  ![enter description here][8]
+ 
+ 7. 在`yarn-site.xml`中配置
+
+  ![enter description here][9]
+  
+ 8. 在slaves中配置
+
+![enter description here][10]
+
+ 9. 这样就配置了主机的`Hadoop`,则需要把这个`hadoop`文件拷贝到子节点,则在主节点上执行:
+   `scp -r /opt/Software/Hadoop/hadoop-2.6.4 root@slaver1:/usr`
+   `scp -r /opt/Software/Hadoop/hadoop-2.6.4 root@slaver2:/usr`
+
+ 10. 拷贝完`hadoop`后还要配置`hadoop`的环境,则可以直接把主节点的profile拷贝到子节点
+   `scp /etc/profile root@slaver1:/etc/`
+ 然后执行`source /etc/profile`重新加载
+ 11. 然后进行格式化(初始化)主节点`namenode`
+
+   运行`Hadoop`命令:`hadoop namenode -format`就可以初始化了,出现`successfully formatted`表示格式化成功
+
+ 12. 启动`hadoop`
+   执行`start-all.sh`进行启动,再执行`jps`就会显示正在运行的JAVA程序
+  主节点上`jps`进程有：
+  `NameNode`
+  `SecondaryNameNode`
+  `ResourceManager`
+  每个子节点上的`jps`进程有：
+  `DataNode`
+ ` NodeManager`
+  如果这样表示`hadoop`集群配置成功
+ 13. 
+
+ 
+ 
+
 
    
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507618366514.jpg "1507618366514.jpg"
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507625175117.jpg "1507625175117.jpg"
+  [3]: https://www.github.com/wxdsunny/images/raw/master/1507635013502.jpg "1507635013502.jpg"
+  [4]: https://www.github.com/wxdsunny/images/raw/master/1507635270903.jpg "1507635270903.jpg"
+  [5]: https://www.github.com/wxdsunny/images/raw/master/1507637048976.jpg "1507637048976.jpg"
+  [6]: https://www.github.com/wxdsunny/images/raw/master/1507637915355.jpg "1507637915355.jpg"
+  [7]: https://www.github.com/wxdsunny/images/raw/master/1507638120425.jpg "1507638120425.jpg"
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507638522476.jpg "1507638522476.jpg"
+  [9]: https://www.github.com/wxdsunny/images/raw/master/1507638835376.jpg "1507638835376.jpg"
+  [10]: https://www.github.com/wxdsunny/images/raw/master/1507639140091.jpg "1507639140091.jpg"
