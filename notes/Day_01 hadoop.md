@@ -4,6 +4,9 @@ tags:
 grammar_cjkRuby: true
 ---
 
+
+[toc]
+# 概论
  1. 起源于nutch项目(是一个搜索引擎)
     基于nutch又研发了其他的搜索引擎和延伸到数据的处理
     搜索:Lucene  solr  elasticsearch
@@ -19,5 +22,25 @@ grammar_cjkRuby: true
     序列化:把文件序列化为二进制,进行传输
     再经过IPC协议(通信调用协议),分为两种:LPC(本地过程调用),RPC(远程过程调用).
 
- 5. 
+# 集群
+   
+## 克隆虚拟机
+  
 
+ 1. 关闭虚拟机,选择右键管理,选择克隆
+
+![enter description here][1]
+
+ 2. 更改ip
+ 3. ssh
+  `ssh-keygen -t rsa` 生成ssh(公钥和私钥)(为了解决每次远程操作时都要访问密码)
+     公钥:给其他的公钥,其他的就可以有权限来操作,远程操作的时候就可以不用密码了
+     私钥:只有自己有
+  生成的公钥和私钥在root的.ssh中(.ssh是个隐藏文件夹),然后把公钥的内容复制到authorized_keys文件中(授权列表,相当于门,而把公钥配置到权限列表中就代表这个公钥可以打开门,如果拿公钥访问的话就会先去授权列表中查看是否有这个公钥,有就直接访问,没有就会要密码)
+  
+
+
+ 4. 
+
+
+  [1]: https://www.github.com/wxdsunny/images/raw/master/1507618366514.jpg "1507618366514.jpg"
