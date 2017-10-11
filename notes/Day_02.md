@@ -94,7 +94,7 @@ grammar_cjkRuby: true
 
 ![][7]
 
-  - `namenode`
+ - `namenode`
    1.处理请求,
    2.分配处理任务,
    3.负责心跳连接(namenode 发送的心跳信号,如果datanode响应就返回信号,如果没有响应就出故障了),
@@ -102,19 +102,66 @@ grammar_cjkRuby: true
    5.副本
    6.==.负荷最重==
    7.==最重要的是元数据的保存处理==:
-          a. 
+          a. 元数据的保存路径
 		  
-		  ![][8]
-		  
-		  
-  - `datanode`
+	  ![][8]
+		  b.namenode启动过程:
+		    1 读取加载fsimage到内存
+			2 加载edits
+			3 存储文件时,文件的元数据以事务的过程把元数据信息放到两个地方(内存,edits:元数据更新的操作记录和操作内容)
+			4 第二次启动时, 读取加载fsimage到内存, 加载edits,按edits里面的操作过程再操作一遍,启动完后,内存里会有一个最全的最新的元数据数据,则会删除fsimage,再新建一个fsimage,把元数据的数据保存到里面,然后再把edits删除,再创建一个空的edits,然后运行的话就会把元数据放如edits中
+			5 每次重新启动 都会循环
+			6 每个元数据的更新都会保存到新的edits中
+			7 长时间的不启动会造成edits里面内容非常大
+		c.secondarynamenode:
+		    1 会监控namenode
+			2 当edits中数据量达到一定量时,拷贝到secondarynamenode
+			3 创建一个新的edits
+			4 然后还会把fsimage拷贝到secondarynamenode
+			5 再把edits和fsimage合并,包括程序的内存和所有元数据的内容
+			6 再把合并后的放入新建的fsimage,再把这个fsimage给namenode中的fsimage
+			7 safe model保证了在启动过程中不会被操作,启动结束后safe model会退出,就可以对元数据进行操作了
+		d.元数据不在
+		    1 当fds启动,会启动namenode 还会启动datanode
+			2 datanode启动后会自动检查data.dir目录下的所有的block信息
+			3 汇报给namenode
+ - `datanode`
     1.数据的读写请求执行
     2.数据的保存操作
-  - `SecondaryNameNode`
+ - `SecondaryNameNode`
     1.元数据的备份
+    
+	#### HDFS优缺点
+	
+ ##### HDFS优点
+ - 高容错性
+    1.数据会自动保存多个副本(如果其中节点出现故障,则会找副本,如果发现副本没有两个,就会再找个节点,保存一份副本)
+    2.副本丢失后,自动回复
+ - 适合批处理
+    1.移动的计算和操作
+    2.数据位置暴露
 
+ - 适合大数据的处理
+    1.GB,TB，PB甚至更大
+    2.百万规模以上的文件数量
+    3.lOK＋节点
+ - 
+  ##### HDFS缺点
   
 
+ - 低延迟数据访问
+    1.   毫秒级读取
+    2.   低延迟与高吞吐量
+
+ - 小文件存取(不能过多)
+     1.占用NameNode内存空间
+     2.寻址时间超过读取时间
+ - 并发写入、文件随即修改(不支持)
+     1. 一个文件同时只能由一个写入者
+     2.  仅支持append
+     3.  不支持随机修改,只支持顺序写
+
+ - 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
