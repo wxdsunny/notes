@@ -1,6 +1,6 @@
 ---
 title: Day_01 hadoop
-tags: 
+tags: hadoop,集群,ssh
 grammar_cjkRuby: true
 ---
 
