@@ -41,6 +41,8 @@ grammar_cjkRuby: true
   2 看日志从尾部看,执行`tail -200`指令,表示看后200行
 
   3 不抛异常,看日志级别,warn,erro等
+  
+  4 看进程角色和节点的hostName的log文件
 
 ### ==查看Hadoop是否启动成功==
  - web端:在浏览器中输入主机的ip或者在window中配置的hostname名加50070端口`master:50070`
@@ -58,7 +60,6 @@ grammar_cjkRuby: true
 快照:(备份是为了数据安全,在生产环境下是必须的)
    虚拟机中的快照:把指定时间的的所有数据内容和状态备份和存储下来
   
-
  - yarn:在浏览器中输入主机的ip或者在window中配置的hostname名加8088端口`master:8088`
 
 ## hdfs
@@ -195,6 +196,7 @@ D.元数据不在
 ## 写的原理
 ### 原理
 
+![enter description here][9]
 
 ### 命令
 
@@ -202,6 +204,7 @@ hdfs dfs -ls /
 hdfs dfs -mkdir /test01必须是绝对路径
 hdfs dfs -put put /test01/斜杠要加
 hdfs dfs -df查看磁盘利用情况
+
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
@@ -211,3 +214,4 @@ hdfs dfs -df查看磁盘利用情况
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507694087255.jpg
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507708635960.jpg
+  [9]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507725380308]]]"
