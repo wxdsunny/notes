@@ -239,19 +239,14 @@ hdfs dfs -put a.txt /test01/   斜杠要加,上传本地的文件到HDFS的目�
 hdfs dfs -get /user/hadoop/a.txt/   从HDFS上下载文件
 hdfs fs -cp src dst   拷贝HDFS上的文件到HDFS上的某个文件下,只能拷贝HDFS
 hdfs dfs -df   查看磁盘利用情况
-hdfs fs -mv src dst
-hdfs fs -cat /user/hadoop/a.txt
-hdfs fs -rm /user/hadoop/a.txt
-hdfs fs -rmr /user/hadoop/a.txt
-hdfs fs -text /user/hadoop/a.txt
-hdfs fs -copyFromLocal localsrc dst 与hadoop fs -put功能类似。
-hdfs fs -moveFromLocal localsrc dst 将本地文件上传到hdfs，同时删除本地文件。
-hdfs fsadmin 
-hdfs dfsadmin -report
-hdfs dfsadmin -safemode enter | leave | get | wait
-hdfs dfsadmin -setBalancerBandwidth 1000
-hdfs fsck /test01
-2.hdfs fsadmin
+hdfs dfs -mv src dst
+hdfs dfs -cat /user/hadoop/a.txt
+hdfs dfs -rm /user/hadoop/a.txt
+hdfs dfs -rmr /user/hadoop/a.txt
+hdfs dfs -text /user/hadoop/a.txt
+hdfs dfs -copyFromLocal localsrc dst 与hadoop fs -put功能类似。
+hdfs dfs -moveFromLocal localsrc dst 将本地文件上传到hdfs，同时删除本地文件。
+2.hdfs dfsadmin  文件系统管理
 hdfs dfsadmin -report
 hdfs dfsadmin -safemode enter | leave | get | wait
 hdfs dfsadmin -setBalancerBandwidth 1000
