@@ -1,6 +1,6 @@
 ---
 title: Day_02 HDFS
-tags:
+tags:架构,分布式文件存储,读写原理
 grammar_cjkRuby: true
 ---
 
