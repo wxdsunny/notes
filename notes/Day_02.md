@@ -136,7 +136,7 @@ B.namenode启动过程:
 
 ``` lsl
 D.元数据不在
-  1 当fds启动,会启动namenode 还会启动datanode
+  1 当HDFS启动,会启动namenode 还会启动datanode
   2 datanode启动后会自动检查data.dir目录下的所有的block信息
   3 汇报给namenode
 ```
