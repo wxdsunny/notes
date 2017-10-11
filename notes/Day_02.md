@@ -94,7 +94,7 @@ grammar_cjkRuby: true
 
 3.
 
-![enter description here][7]
+![][7]
 
 namenode处理请求
   
