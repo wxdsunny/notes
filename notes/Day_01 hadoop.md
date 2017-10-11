@@ -79,7 +79,7 @@ grammar_cjkRuby: true
  2. 配置环境变量:
    先配置`/etc/profile`文件中的环境变量,把`hadoop`配置到环境变量中
 
-  ![enter description here][8]
+  ![][8]
 
    再`source /etc/profile`加载一下配置文件,可以输入`hadoop`的时候有提示,证明配置Hadoop成功
  3. `hadoop`的配置
@@ -93,20 +93,20 @@ grammar_cjkRuby: true
  4. 配置`Hadoop`的环境
     (1)在`hadoop-env.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`这样就不会出现找不到程序的环境变量.
 
-  ![enter description here][9]
+  ![][9]
    
    (2)在`yarn-evn.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`
     
-  ![enter description here][10]
+  ![][10]
  5. 在`core-site.xml`中配置
 
-  ![enter description here][11]
+  ![][11]
   
  
 
  6. 在`hdfs-site.xml`中配置
   
-  ![enter description here][12]
+  ![][12]
   
   在版本新的里面没有`mapred-site.xml`,只有
   
