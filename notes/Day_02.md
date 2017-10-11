@@ -54,7 +54,20 @@ yarn下面两个角色:(主从架构的集群)
 
 ![][3]
 
+![][4]
+
+![][5]
+
+![][6]
+
+快照:(备份是为了数据安全,在生产环境下是必须的)
+   虚拟机中的快照:把指定时间的的所有数据内容和状态备份和存储下来
+   
+
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
-  [3]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507689071769]]]"
+  [3]: https://www.github.com/wxdsunny/images/raw/master/1507689071769.jpg
+  [4]: https://www.github.com/wxdsunny/images/raw/master/1507689314125.jpg
+  [5]: https://www.github.com/wxdsunny/images/raw/master/1507689380660.jpg
+  [6]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507689469076]]]"
