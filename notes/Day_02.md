@@ -120,7 +120,7 @@ A. 元数据的保存路径
 ```
   ![][8]
 	  
-``` tap
+``` gams
 B.namenode启动过程:
   1 读取加载fsimage(在磁盘中)到内存
   2 加载edits
@@ -190,8 +190,16 @@ D.元数据不在
      2.  仅支持append(指追加)
      3.  不支持随机修改,只支持顺序写
 
- - 
+## 写的原理
+### 原理
 
+
+### 命令
+
+hdfs dfs -ls /
+hdfs dfs -mkdir /test01必须是绝对路径
+hdfs dfs -put put /test01/斜杠要加
+hdfs dfs -df查看磁盘利用情况
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
