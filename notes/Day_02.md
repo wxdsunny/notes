@@ -1,5 +1,5 @@
 ---
-title: Day_02
+title: Day_02 HDFS
 tags:
 grammar_cjkRuby: true
 ---
