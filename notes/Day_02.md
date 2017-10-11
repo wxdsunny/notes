@@ -251,6 +251,13 @@ hdfs dfsadmin -report
 hdfs dfsadmin -safemode enter | leave | get | wait
 hdfs dfsadmin -setBalancerBandwidth 1000
 hdfs fsck /test01
+2.hdfs fsadmin
+hdfs dfsadmin -report
+hdfs dfsadmin -safemode enter | leave | get | wait
+hdfs dfsadmin -setBalancerBandwidth 1000
+3.hdfs fsck  查看文件使用状况
+4. start-balancer.sh
+负载均衡,可以使DataNode节点上选择策略重新平衡DataNode上的数据块的分布
 ```
 
 
