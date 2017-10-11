@@ -50,4 +50,11 @@ yarn下面两个角色:(主从架构的集群)
 查看Hadoop是否启动成功
  - web端:在浏览器中输入主机的ip或者在window中配置的hostname名加50070端口`http://master:50070`
 
+![][2]
+
+![][3]
+
+
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
+  [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
+  [3]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507689071769]]]"
