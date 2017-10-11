@@ -219,6 +219,8 @@ D.元数据不在
 
 > 当客户端要存储文件时,Hadoop集群收到请求,会发送给namenode信息(元数据的信息),然后namenode会根据元数据的信息和分的块的信息分配节点,再返回给客户端节点的uil,客户端拿到uil后就会一个一个块地进行发送,找到相应的节点,然后第一个节点收到第一个块后存储一份再给第二个节点发送,第二个节点也存储一份,继续发送给第三个节点,在第一个节点把第一个块给第二个节点的时候,第二个块就又开始进行发送,就这样循环到所有数据都存储备份到不同的节点中.当节点接收到块时还会响应给namenode,这样就不会存在有故障的节点中了.全部文件存储成功后namenode会响应给客户端信息表示完成
 
+>当客户端为外部的就是上面的步骤,当客户端为某个机架内部的时候,则请求发送到namenode后, namenode会先在发送请求的机架中找其他的可用的datanode,然后再备份到其他的机架中的datanode中,然后第二个块也是相同的分法,但是本机架中已经无其他节点的时候就会直接存在其他机架中,读也是一样的
+
 >#### ==读的原理==
 
 ![][10]
@@ -226,12 +228,30 @@ D.元数据不在
 >HDFS采用的是“一次写入多次读取”的文件访问模型。一个文件经过创建、写入和关闭之后就不需要改变。这一假设简化了数据一致性问题，并且使高吞吐量的数据访问成为可能。
 >当客户端要读文件时,发送请求到Hadoop,然后把文件名给namenode,namenode得到文件名后去找文件块存放的最近的节点,然后列成列表(列表是以块1在哪个节点上有存储,块2在哪个节点上有存储···即block1:host2,host1,host3      block2:host7,host8,host4 )给了客户端,客户端拿着列表去访问对应的节点,然后读取元数据,最后就得到了文件
 
-### 命令
+### 常用命令
 
-hdfs dfs -ls /
-hdfs dfs -mkdir /test01必须是绝对路径
-hdfs dfs -put put /test01/斜杠要加
-hdfs dfs -df查看磁盘利用情况
+``` java
+1.一般命令
+hdfs dfs -ls /  查看根目录下的文件
+hdfs fs -ls -R /  递归查看根目录下的文件
+hdfs dfs -mkdir /test01    在HDFS中必须是绝对路径,在根目录下新建一个文件夹
+hdfs dfs -put a.txt /test01/   斜杠要加,上传本地的文件到HDFS的目录下
+hdfs dfs -get /user/hadoop/a.txt/   从HDFS上下载文件
+hdfs fs -cp src dst   拷贝HDFS上的文件到HDFS上的某个文件下,只能拷贝HDFS
+hdfs dfs -df   查看磁盘利用情况
+hdfs fs -mv src dst
+hdfs fs -cat /user/hadoop/a.txt
+hdfs fs -rm /user/hadoop/a.txt
+hdfs fs -rmr /user/hadoop/a.txt
+hdfs fs -text /user/hadoop/a.txt
+hdfs fs -copyFromLocal localsrc dst 与hadoop fs -put功能类似。
+hdfs fs -moveFromLocal localsrc dst 将本地文件上传到hdfs，同时删除本地文件。
+hdfs fsadmin 
+hdfs dfsadmin -report
+hdfs dfsadmin -safemode enter | leave | get | wait
+hdfs dfsadmin -setBalancerBandwidth 1000
+hdfs fsck /test01
+```
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
