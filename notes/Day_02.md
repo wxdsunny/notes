@@ -108,7 +108,7 @@ grammar_cjkRuby: true
 	  ![][8]
 	  
 ``` tap
-      b.namenode启动过程:
+b.namenode启动过程:
          1 读取加载fsimage到内存
 		 2 加载edits
 		 3 存储文件时,文件的元数据以事务的过程把元数据信息放到两个地方(内存,edits:元数据更新的操作记录和操作内容)
