@@ -193,10 +193,21 @@ D.元数据不在
      2.  仅支持append(指追加)
      3.  不支持随机修改,只支持顺序写
 
-## 写的原理
+## 写读的原理
 ### 原理
 
+
+> ==写的原理==
+
 ![][9]
+
+> 当客户端要存储文件时,Hadoop集群收到请求,会发送给namenode信息(元数据的信息),然后namenode会根据元数据的信息和分的块的信息分配节点,再返回给客户端节点的uil,客户端拿到uil后就会一个一个块地进行发送,找到相应的节点,然后第一个节点收到第一个块后存储一份再给第二个节点发送,第二个节点也存储一份,继续发送给第三个节点,在第一个节点把第一个块给第二个节点的时候,第二个块就又开始进行发送,就这样循环到所有数据都存储备份到不同的节点中.当节点接收到块时还会响应给namenode,这样就不会存在有故障的节点中了.全部文件存储成功后namenode会响应给客户端信息表示完成
+
+>==读的原理==
+
+![][10]
+
+>
 
 ### 命令
 
@@ -215,3 +226,4 @@ hdfs dfs -df查看磁盘利用情况
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507694087255.jpg
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507708635960.jpg
   [9]: https://www.github.com/wxdsunny/images/raw/master/1507725380308.jpg
+  [10]: https://www.github.com/wxdsunny/images/raw/master/1507727862816.jpg
