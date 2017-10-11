@@ -103,12 +103,12 @@ grammar_cjkRuby: true
    6.==.负荷最重==
    7.==最重要的是元数据的保存处理==:
   
-          a. 元数据的保存路径
+       A. 元数据的保存路径
 		  
 	  ![][8]
 	  
 ``` tap
-b.namenode启动过程:
+B.namenode启动过程:
   1 读取加载fsimage(在磁盘中)到内存
   2 加载edits
   3 存储文件时,文件的元数据以事务的过程把元数据信息放到两个地方(内存,edits:元数据更新的操作记录和操作内容)
@@ -122,7 +122,7 @@ b.namenode启动过程:
 	 
 
 ``` gams
- c.secondarynamenode:
+ C.secondarynamenode:
    1 会监控namenode
    2 当edits中数据量达到一定量时,拷贝到secondarynamenode
    3 创建一个新的edits
@@ -135,7 +135,7 @@ b.namenode启动过程:
 
 
 ``` lsl
-d.元数据不在
+D.元数据不在
   1 当fds启动,会启动namenode 还会启动datanode
   2 datanode启动后会自动检查data.dir目录下的所有的block信息
   3 汇报给namenode
