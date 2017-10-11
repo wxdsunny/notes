@@ -100,8 +100,13 @@ grammar_cjkRuby: true
    3.负责心跳连接(namenode 发送的心跳信号,如果datanode响应就返回信号,如果没有响应就出故障了),
    4.均衡(自动均衡,手动均衡),
    5.副本
-   6==.负荷最重==
-   7.==最重要的是元数据的保存处理==
+   6.==.负荷最重==
+   7.==最重要的是元数据的保存处理==:
+          a. 
+		  
+		  ![][8]
+		  
+		  
   - `datanode`
     1.数据的读写请求执行
     2.数据的保存操作
@@ -118,3 +123,4 @@ grammar_cjkRuby: true
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507689380660.jpg
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507694087255.jpg
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507702150255.jpg
