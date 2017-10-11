@@ -80,16 +80,23 @@ grammar_cjkRuby: true
    4 nosql中只有==元组==
  
  - ==特点:==
-   1.保存多个副本
+
+1.保存多个副本
      - 没有副本的话就会产生读取失败,会出现不稳定,风险性高,在生产环境下就是可用性低
      - 副本的方式来解决稳定性问题,其中一个节点出现故障,hdfs就会去找它的副本,再转到副本上操作
      - 
-   2.副本保存原则
+  2.副本保存原则
      - 存储在不同的物理节点上()
      - 机架感知(第一个副本保存在一个机架后,其他副本会优先在其他机架中备份)
- 3.缺点
-     - 
-     - 
+     - 副本丢失或宕机自动恢复。默认存3份
+     - 运行在廉价的机器上。
+     - 适合大数据的处理,不宜放过多的小文件,大量小文件会加重内存负担
+
+3.
+
+![enter description here][7]
+
+namenode处理请求
   
 
 
@@ -99,3 +106,4 @@ grammar_cjkRuby: true
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507689314125.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507689380660.jpg
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
+  [7]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507693557501]]]"
