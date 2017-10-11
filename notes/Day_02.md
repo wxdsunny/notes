@@ -196,7 +196,7 @@ D.元数据不在
 ## 写的原理
 ### 原理
 
-![enter description here][9]
+![][9]
 
 ### 命令
 
@@ -214,4 +214,4 @@ hdfs dfs -df查看磁盘利用情况
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507694087255.jpg
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507708635960.jpg
-  [9]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507725380308]]]"
+  [9]: https://www.github.com/wxdsunny/images/raw/master/1507725380308.jpg
