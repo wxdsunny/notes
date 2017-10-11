@@ -109,13 +109,13 @@ grammar_cjkRuby: true
 	  
 ``` tap
 b.namenode启动过程:
-         1 读取加载fsimage到内存
-		 2 加载edits
-		 3 存储文件时,文件的元数据以事务的过程把元数据信息放到两个地方(内存,edits:元数据更新的操作记录和操作内容)
-		 4 第二次启动时, 读取加载fsimage到内存, 加载edits,按edits里面的操作过程再操作一遍,启动完后,内存里会有一个最全的最新的元数据数据,则会删除fsimage,再新建一个fsimage,把元数据的数据保存到里面,然后再把edits删除,再创建一个空的edits,然后运行的话就会把元数据放如edits中
-		5 每次重新启动 都会循环
-		6 每个元数据的更新都会保存到新的edits中
-		7 长时间的不启动会造成edits里面内容非常大
+  1 读取加载fsimage(在磁盘中)到内存
+  2 加载edits
+  3 存储文件时,文件的元数据以事务的过程把元数据信息放到两个地方(内存,edits:元数据更新的操作记录和操作内容)
+  4 第二次启动时, 读取加载fsimage到内存, 加载edits,按edits里面的操作过程再操作一遍,启动完后,内存里会有一个最全的最新的元数据数据,则会删除fsimage,再新建一个fsimage,把元数据的数据保存到里面,然后再把edits删除,再创建一个空的edits,然后运行的话就会把元数据放如edits中
+  5 每次重新启动 都会循环
+  6 每个元数据的更新都会保存到新的edits中
+  7 长时间的不启动会造成edits里面内容非常大
 ```
 
 	
@@ -123,13 +123,13 @@ b.namenode启动过程:
 
 ``` gams
  c.secondarynamenode:
-		    1 会监控namenode
-			2 当edits中数据量达到一定量时,拷贝到secondarynamenode
-			3 创建一个新的edits
-			4 然后还会把fsimage拷贝到secondarynamenode
-			5 再把edits和fsimage合并,包括程序的内存和所有元数据的内容
-			6 再把合并后的放入新建的fsimage,再把这个fsimage给namenode中的fsimage
-			7 safe model保证了在启动过程中不会被操作,启动结束后safe model会退出,就可以对元数据进行操作了
+   1 会监控namenode
+   2 当edits中数据量达到一定量时,拷贝到secondarynamenode
+   3 创建一个新的edits
+   4 然后还会把fsimage拷贝到secondarynamenode
+   5 再把edits和fsimage合并,包括程序的内存和所有元数据的内容
+   6 再把合并后的放入新建的fsimage,再把这个fsimage给namenode中的fsimage
+   7 safe model保证了在启动过程中不会被操作,启动结束后safe model会退出,就可以对元数据进行操作了
 ```
 
 
@@ -140,8 +140,6 @@ d.元数据不在
   2 datanode启动后会自动检查data.dir目录下的所有的block信息
   3 汇报给namenode
 ```
-
-			
 			
  - `datanode`
     1.数据的读写请求执行
