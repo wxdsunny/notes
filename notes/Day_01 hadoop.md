@@ -110,19 +110,19 @@ grammar_cjkRuby: true
   
   在版本新的里面没有`mapred-site.xml`,只有
   
-  ![enter description here][13]
+  ![][13]
   
   则复制改个名`mapred-site.xml`然后在`mapred-site.xml`中配置:
   
-  ![enter description here][14]
+  ![][14]
  
  7. 在`yarn-site.xml`中配置
 
-  ![enter description here][15]
+  ![][15]
   
  8. 在slaves中配置
 
-![enter description here][16]
+![][16]
 
  9. 这样就配置了主机的`Hadoop`,则需要把这个`hadoop`文件拷贝到子节点,则在主节点上执行:
    `scp -r /opt/Software/Hadoop/hadoop-2.6.4 root@slaver1:/usr`
