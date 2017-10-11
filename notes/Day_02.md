@@ -48,7 +48,7 @@ yarn下面两个角色:(主从架构的集群)
 不抛异常,看日志级别,warn,erro等
 
 查看Hadoop是否启动成功
- - web端:在浏览器中输入主机的ip或者在window中配置的hostname名加50070端口`http://master:50070`
+ - web端:在浏览器中输入主机的ip或者在window中配置的hostname名加50070端口`master:50070`
 
 ![][2]
 
@@ -62,12 +62,13 @@ yarn下面两个角色:(主从架构的集群)
 
 快照:(备份是为了数据安全,在生产环境下是必须的)
    虚拟机中的快照:把指定时间的的所有数据内容和状态备份和存储下来
-   
+  
 
+ - yarn:在浏览器中输入主机的ip或者在window中配置的hostname名加8088端口`master:8088`
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507689071769.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507689314125.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507689380660.jpg
-  [6]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507689469076]]]"
+  [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
