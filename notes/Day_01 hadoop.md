@@ -54,6 +54,7 @@ grammar_cjkRuby: true
 
  ### ssh
  
+ ![][7]
  
   (1)`ssh-keygen -t rsa` 生成ssh(公钥和私钥)(为了解决每次远程操作时都要访问密码)
      公钥:给其他的公钥,其他的就可以有权限来操作,远程操作的时候就可以不用密码了
@@ -78,7 +79,7 @@ grammar_cjkRuby: true
  2. 配置环境变量:
    先配置`/etc/profile`文件中的环境变量,把`hadoop`配置到环境变量中
 
-  ![enter description here][7]
+  ![enter description here][8]
 
    再`source /etc/profile`加载一下配置文件,可以输入`hadoop`的时候有提示,证明配置Hadoop成功
  3. `hadoop`的配置
@@ -92,36 +93,36 @@ grammar_cjkRuby: true
  4. 配置`Hadoop`的环境
     (1)在`hadoop-env.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`这样就不会出现找不到程序的环境变量.
 
-  ![enter description here][8]
+  ![enter description here][9]
    
    (2)在`yarn-evn.sh`中把`export JAVA_HOME`的值改为固定的`JDK`的值即`export JAVA_HOME=/opt/Software/Java/jdk1.8.0_141`
     
-  ![enter description here][9]
+  ![enter description here][10]
  5. 在`core-site.xml`中配置
 
-  ![enter description here][10]
+  ![enter description here][11]
   
  
 
  6. 在`hdfs-site.xml`中配置
   
-  ![enter description here][11]
+  ![enter description here][12]
   
   在版本新的里面没有`mapred-site.xml`,只有
   
-  ![enter description here][12]
+  ![enter description here][13]
   
   则复制改个名`mapred-site.xml`然后在`mapred-site.xml`中配置:
   
-  ![enter description here][13]
+  ![enter description here][14]
  
  7. 在`yarn-site.xml`中配置
 
-  ![enter description here][14]
+  ![enter description here][15]
   
  8. 在slaves中配置
 
-![enter description here][15]
+![enter description here][16]
 
  9. 这样就配置了主机的`Hadoop`,则需要把这个`hadoop`文件拷贝到子节点,则在主节点上执行:
    `scp -r /opt/Software/Hadoop/hadoop-2.6.4 root@slaver1:/usr`
@@ -159,12 +160,13 @@ grammar_cjkRuby: true
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507684886637.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507684893733.jpg
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507685122055.jpg
-  [7]: https://www.github.com/wxdsunny/images/raw/master/1507625175117.jpg "1507625175117.jpg"
-  [8]: https://www.github.com/wxdsunny/images/raw/master/1507635013502.jpg "1507635013502.jpg"
-  [9]: https://www.github.com/wxdsunny/images/raw/master/1507635270903.jpg "1507635270903.jpg"
-  [10]: https://www.github.com/wxdsunny/images/raw/master/1507637048976.jpg "1507637048976.jpg"
-  [11]: https://www.github.com/wxdsunny/images/raw/master/1507637915355.jpg "1507637915355.jpg"
-  [12]: https://www.github.com/wxdsunny/images/raw/master/1507638120425.jpg "1507638120425.jpg"
-  [13]: https://www.github.com/wxdsunny/images/raw/master/1507638522476.jpg "1507638522476.jpg"
-  [14]: https://www.github.com/wxdsunny/images/raw/master/1507638835376.jpg "1507638835376.jpg"
-  [15]: https://www.github.com/wxdsunny/images/raw/master/1507639140091.jpg "1507639140091.jpg"
+  [7]: https://www.github.com/wxdsunny/images/raw/master/1507685160429.jpg
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507625175117.jpg "1507625175117.jpg"
+  [9]: https://www.github.com/wxdsunny/images/raw/master/1507635013502.jpg "1507635013502.jpg"
+  [10]: https://www.github.com/wxdsunny/images/raw/master/1507635270903.jpg "1507635270903.jpg"
+  [11]: https://www.github.com/wxdsunny/images/raw/master/1507637048976.jpg "1507637048976.jpg"
+  [12]: https://www.github.com/wxdsunny/images/raw/master/1507637915355.jpg "1507637915355.jpg"
+  [13]: https://www.github.com/wxdsunny/images/raw/master/1507638120425.jpg "1507638120425.jpg"
+  [14]: https://www.github.com/wxdsunny/images/raw/master/1507638522476.jpg "1507638522476.jpg"
+  [15]: https://www.github.com/wxdsunny/images/raw/master/1507638835376.jpg "1507638835376.jpg"
+  [16]: https://www.github.com/wxdsunny/images/raw/master/1507639140091.jpg "1507639140091.jpg"
