@@ -103,9 +103,22 @@ grammar_cjkRuby: true
    6.==.负荷最重==
    7.==最重要的是元数据的保存处理==:
   
-       A. 元数据的保存路径
-		  
-	  ![][8]
+
+``` dns
+A. 元数据的保存路径
+  1.fsimage文件存元数据的具体内容:
+    - 文件名称
+    - 文件的大小
+    - 路径
+    - 创建者
+    - 时间
+    - 文件的分块信息
+  2.edits存元数据的操作日志(以操作记录的形式存在edits里面)
+    - 创建文件
+    - 删除,修改
+  3.每一个block的位置:在集群中的哪一个节点上(datanode提供)
+```
+  ![][8]
 	  
 ``` tap
 B.namenode启动过程:
@@ -125,7 +138,7 @@ B.namenode启动过程:
  C.secondarynamenode:
    1 会监控namenode
    2 当edits中数据量达到一定量时,拷贝到secondarynamenode
-   3 创建一个新的edits
+   3 在secondarynamenode创建一个新的edits
    4 然后还会把fsimage拷贝到secondarynamenode
    5 再把edits和fsimage合并,包括程序的内存和所有元数据的内容
    6 再把合并后的放入新建的fsimage,再把这个fsimage给namenode中的fsimage
@@ -179,6 +192,7 @@ D.元数据不在
 
  - 
 
+
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507688049872.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507688964607.jpg
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507689071769.jpg
@@ -186,4 +200,4 @@ D.元数据不在
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507689380660.jpg
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507689469076.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507694087255.jpg
-  [8]: https://www.github.com/wxdsunny/images/raw/master/1507702150255.jpg
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507708635960.jpg
