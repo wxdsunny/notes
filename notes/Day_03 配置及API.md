@@ -224,9 +224,10 @@ public static void byFSInputStream(String localSrc,String hdfsDst) throws Except
 		outputStream.close();
 	}
 	byFSInputStream("E:/abc/", "/test03/a.txt");
+	
 	下载的时候也需要给文件起名字,而且如果中间有文件夹必须真实存在,E:/abc/如果文件夹不存在则会以abc为文件名来创建
 	
-	还可以用 IOUtils来进行下载:
+	也可以用 IOUtils来进行下载:
 	
 	public static void downfile(String localSrc,String hdfsDst) throws Exception {
 		Path hdfsPath = new Path(hdfsDst);
