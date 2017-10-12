@@ -270,6 +270,7 @@ public static void catalog(String fileName) throws Exception {
 			}
 		}
 	}
+	catalog("/");
 
    也可以用迭代器进行递归:
 
