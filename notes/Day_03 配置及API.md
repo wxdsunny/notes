@@ -88,8 +88,6 @@ c.在windows中配置hadoop的环境变量
 
 ![][10]
 
-![][11]
-
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507811742712.jpg
