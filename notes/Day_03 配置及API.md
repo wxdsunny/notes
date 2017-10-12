@@ -79,8 +79,8 @@ grammar_cjkRuby: true
 a.在GitHub上下载hadoop-common-2.6.0-bin-master.zip
 b.解压后拷贝hadoop.dll到c:\Windows\system32文件夹下面
 c.在windows中配置hadoop的环境变量
-   i.创建变量HADOOP_HOME
-  ii.值为hadoop-common-bin的安装目录
+    i.创建变量HADOOP_HOME
+   ii.值为hadoop-common-bin的安装目录
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
