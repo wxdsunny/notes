@@ -46,9 +46,13 @@ grammar_cjkRuby: true
 
 ## ==运行时报错==
 
+>1.
+
+![][5]
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507811742712.jpg
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507811910122.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507812724522.jpg
+  [5]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507813583548]]]"
