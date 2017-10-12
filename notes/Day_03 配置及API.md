@@ -50,9 +50,21 @@ grammar_cjkRuby: true
 
 ![][5]
 
->2.
+>解决办法有:
+>a 把对应的jar包在Maven仓库中找到,删除重新导入
+>b 把Maven仓库中org——>apache中的hadoop文件删除,重新导一次
+
+>2.写入的时候和读取时方法不一致
 
 ![][6]
+
+![][7]
+
+>解决办法:
+>重新再写入一遍,然后用一致的方法读出来
+
+
+>3.
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
@@ -60,4 +72,5 @@ grammar_cjkRuby: true
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507811910122.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507812724522.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507813583548.jpg
-  [6]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507813731818]]]"
+  [6]: https://www.github.com/wxdsunny/images/raw/master/1507813731818.jpg
+  [7]: https://www.github.com/wxdsunny/images/raw/master/1507815568354.jpg
