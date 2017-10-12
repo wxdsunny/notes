@@ -136,7 +136,24 @@ public static final Configuration CONF = new Configuration();
 删除时文件夹必须存在,而且第二个参数为true,代表递归删除,如果是文件的话设置为true或者false都可以
 ```
 
-#### 
+#### 将数据写入HDFS或读取到本地
+
+``` java
+写入数据:
+public static void write(String fileName,String content) throws Exception {
+		Path path = new Path(fileName);
+		if(fileSystem.exists(path)){
+			System.out.println("文件"+fileName+"已存在");
+		}else{
+			FSDataOutputStream outputStream = fileSystem.create(path);
+			outputStream.writeUTF(content);
+			//outputStream.write(content.getBytes());
+			outputStream.flush();
+			outputStream.close();
+		}
+	}
+```
+
 
 
 
