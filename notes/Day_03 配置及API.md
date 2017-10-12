@@ -116,6 +116,7 @@ public static final Configuration CONF = new Configuration();
 
 ``` java
 新建一个文件:
+
  public static void creatFolder(String floderName) throws Exception {
     	Path path = new Path(floderName);
     	if(fileSystem.exists(path)){
@@ -124,7 +125,9 @@ public static final Configuration CONF = new Configuration();
 			fileSystem.mkdirs(path);
 		}
 	}
+	
 删除文件:
+
  public static void deleteFile(String fileName) throws Exception {
     	Path path = new Path(fileName);
     	if(!fileSystem.exists(path)){
@@ -133,6 +136,7 @@ public static final Configuration CONF = new Configuration();
     		fileSystem.delete(path, true);
     	}
 	}
+	
 删除时文件夹必须存在,而且第二个参数为true,代表递归删除,如果是文件的话设置为true或者false都可以
 ```
 
@@ -140,6 +144,7 @@ public static final Configuration CONF = new Configuration();
 
 ``` java
 写入数据:
+
 public static void write(String fileName,String content) throws Exception {
 		Path path = new Path(fileName);
 		if(fileSystem.exists(path)){
@@ -152,6 +157,87 @@ public static void write(String fileName,String content) throws Exception {
 			outputStream.close();
 		}
 	}
+	
+   writeUTF()方法是写入一个String类型的数据
+	  
+	  
+读取到本地:
+
+ public static void redFile(String fileName) throws Exception {
+		Path path = new Path(fileName);
+		if(!fileSystem.exists(path) || fileSystem.isDirectory(path)){
+			System.out.println("给定路径:"+path+"不存在或者是个文件夹");
+		}else{
+			FSDataInputStream inputStream = fileSystem.open(path);
+			String readUTF = inputStream.readUTF();
+			System.out.println(readUTF);
+		}
+	}
+	
+	readUTF()返回一个String类型
+	写入的时候和读取的时候必须是一直的,用writeUTF()写就要用readUTF()读,不然会报错
+```
+#### 将文件以流的形式上传或下载
+
+``` java
+1 以流上传:
+
+public static void byFSOutputStream(String localSrc,String hdfsDst) throws Exception {
+		Path hdfsPath = new Path(hdfsDst);
+		FileInputStream fileInputStream = new FileInputStream(localSrc);
+		FSDataOutputStream dataOutputStream = fileSystem.create(hdfsPath);
+		byte [] b = new byte [1024*5];
+		int len = 0;
+		while((len = fileInputStream.read(b))!=-1){
+			dataOutputStream.write(b, 0, len);
+		}
+		fileInputStream.close();
+	}
+	byFSOutputStream("E:/三国演义.txt", "/test04");
+	
+	从local用输入流读取,用HDFS的输出流写入HDFS上,传入的hdfsDst必须是已存在的文件夹,而且如果文件夹已经存在,想存入文件夹下,则必须给文件起名字,如果直接/test04,则会给文件起的名字为test04
+	
+	还可以用 IOUtils来进行上传:
+	
+	public static void copyfile(String localSrc,String hdfsDst) throws Exception {
+		Path hdfsPath = new Path(hdfsDst);
+		FileInputStream fileInputStream = new FileInputStream(localSrc);
+		FSDataOutputStream dataOutputStream = fileSystem.create(hdfsPath);
+	    IOUtils.copyBytes(fileInputStream, dataOutputStream, 4096, true);
+	}
+	copyfile("E:/三国演义.txt", "/test03/c.txt");
+	
+	参数为输入流,输出流,缓存大小和流的关闭,设置为true就会进行流的关闭,为false就不会关闭流.
+	这个util的方法做到直接用输入流读取用输出流写入,就不用再读取到数组中进行循环写入了
+	
+2 以流下载:
+
+public static void byFSInputStream(String localSrc,String hdfsDst) throws Exception {
+		Path path = new Path(hdfsDst);
+		FileOutputStream outputStream = new FileOutputStream(localSrc);
+		FSDataInputStream dataInputStream = fileSystem.open(path);
+		byte [] b = new byte [1024*5];
+		int len = 0;
+		while((len = dataInputStream.read(b))!=-1){
+			outputStream.write(b, 0, len);
+		}
+		outputStream.close();
+	}
+	byFSInputStream("E:/abc/", "/test03/a.txt");
+	下载的时候也需要给文件起名字,而且如果中间有文件夹必须真实存在,E:/abc/如果文件夹不存在则会以abc为文件名来创建
+	
+	还可以用 IOUtils来进行下载:
+	
+	public static void downfile(String localSrc,String hdfsDst) throws Exception {
+		Path hdfsPath = new Path(hdfsDst);
+		FileOutputStream outputStream = new FileOutputStream(localSrc);
+		FSDataInputStream dataInputStream = fileSystem.open(hdfsPath);
+		IOUtils.copyBytes(dataInputStream, outputStream, 4096, true);
+	}
+	downfile("E:/abc/abc.txt", "/test03/a.txt");
+	
+	
+	
 ```
 
 
