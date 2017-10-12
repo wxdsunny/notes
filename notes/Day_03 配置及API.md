@@ -237,8 +237,51 @@ public static void byFSInputStream(String localSrc,String hdfsDst) throws Except
 	}
 	downfile("E:/abc/abc.txt", "/test03/a.txt");
 	
+```
+#### 查看文件
+
+``` java
+1 查看指定目录下的文件
+
+public static void catalog(String fileName) throws Exception {
+		FileSystem fileSystem = getFileSystem();
+		Path path = new Path(fileName);
+		FileStatus[] listStatus = fileSystem.listStatus(path);
+		for (FileStatus fileStatus : listStatus) {
+			System.out.println(fileStatus.getPath());
+		}
+	}
+	catalog("/test01");
 	
+	这样只能查看指定目录下的所有文件和文件夹,但是文件夹的子目录看不了,所以会有递归查看
 	
+2 递归查看文件
+    可以用数组递归:
+	
+	public static void catalog(String fileName) throws Exception {
+		FileSystem fileSystem = getFileSystem();
+		Path path = new Path(fileName);
+		FileStatus[] listStatus = fileSystem.listStatus(path);
+		for (FileStatus fileStatus : listStatus) {
+			if(fileStatus.isDirectory()){
+				catalog(fileStatus.getPath().toString());
+			}else{
+				System.out.println(fileStatus.getPath());
+			}
+		}
+	}
+
+   也可以用迭代器进行递归:
+
+    public static void catalog(String fileName) throws Exception {
+		Path path = new Path(fileName);
+		RemoteIterator<LocatedFileStatus> listFiles = fileSystem.listFiles(path, true);
+		while(listFiles.hasNext()){
+			LocatedFileStatus next = listFiles.next();
+			Path newPath = next.getPath();
+			System.out.println("文件地址为:"+newPath);
+		}
+	}
 ```
 
 
