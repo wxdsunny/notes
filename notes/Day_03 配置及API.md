@@ -4,6 +4,20 @@ tags: 新建,模板,小书匠
 grammar_cjkRuby: true
 ---
 
+	* [配置Hadoop插件](#配置hadoop插件)
+		* [eclipse安装后配置](#eclipse安装后配置)
+	* [使用HadoopAPI代码](#使用hadoopapi代码)
+		* [联邦(Federation)](#联邦federation)
+		* [查看API文档](#查看api文档)
+		* [Maven工程的创建](#maven工程的创建)
+	* [==运行时报错==](#运行时报错)
+	* [API的JAVA代码](#api的java代码)
+		* [创建FileSystem对象](#创建filesystem对象)
+		* [用FileSystem对象执行方法](#用filesystem对象执行方法)
+			* [在HDFS上新建和删除文件](#在hdfs上新建和删除文件)
+			* [将数据写入HDFS或读取到本地](#将数据写入hdfs或读取到本地)
+			* [将文件以流的形式上传或下载](#将文件以流的形式上传或下载)
+			* [查看文件](#查看文件)
 
 ## 配置Hadoop插件
 ### eclipse安装后配置
