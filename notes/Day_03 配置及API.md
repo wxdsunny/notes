@@ -98,14 +98,24 @@ c.在windows中配置hadoop的环境变量
 ![][11]
 
 ``` java
-Configuration conf = new Configuration();
-FileSystem fileSystem = FileSystem.get(conf);
+public static final Configuration CONF = new Configuration();
+    public static FileSystem fileSystem;
+    
+    static{
+    	try {
+			fileSystem = FileSystem.get(CONF);
+		} catch (Exception e) {
+			System.out.println("无法连接HDFS,请检查配置");
+			e.printStackTrace();
+		}
+    }
 ```
 ### 用FileSystem对象执行方法
 
-#### 在HDFS上新建一个文件夹
+#### 在HDFS上新建和删除文件
 
 ``` java
+新建一个文件:
  public static void creatFolder(String floderName) throws Exception {
     	Path path = new Path(floderName);
     	if(fileSystem.exists(path)){
@@ -114,8 +124,19 @@ FileSystem fileSystem = FileSystem.get(conf);
 			fileSystem.mkdirs(path);
 		}
 	}
+删除文件:
+ public static void deleteFile(String fileName) throws Exception {
+    	Path path = new Path(fileName);
+    	if(!fileSystem.exists(path)){
+    		System.out.println("给定路径不存在");
+    	}else{
+    		fileSystem.delete(path, true);
+    	}
+	}
+删除时文件夹必须存在,而且第二个参数为true,代表递归删除,如果是文件的话设置为true或者false都可以
 ```
-#### 在
+
+#### 
 
 
 
