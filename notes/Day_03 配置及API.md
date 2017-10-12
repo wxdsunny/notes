@@ -70,14 +70,17 @@ grammar_cjkRuby: true
 ![][8]
 
 >解决方法:
+
+
 >1 用	copyToLocalFile(boolean delSrc, Path src, Path dst, boolean useRawLocalFileSystem)
 >boolean delSrc表示是否下载后删除原来的文件, boolean useRawLocalFileSystem是否使用原始本地文件系统
+
 >2.配置
-   a.在GitHub上下载hadoop-common-2.6.0-bin-master.zip
-  b.解压后拷贝hadoop.dll到c:\Windows\system32文件夹下面
+a.在GitHub上下载hadoop-common-2.6.0-bin-master.zip
+b.解压后拷贝hadoop.dll到c:\Windows\system32文件夹下面
 c.在windows中配置hadoop的环境变量
-i.创建变量HADOOP_HOME
-ii.值为hadoop-common-bin的安装目录
+   i.创建变量HADOOP_HOME
+  ii.值为hadoop-common-bin的安装目录
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
