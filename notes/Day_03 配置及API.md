@@ -272,7 +272,7 @@ public static void catalog(String fileName) throws Exception {
 	}
 	catalog("/");
 
-   也可以用迭代器进行递归:
+   也可以用listFiles(path, true)进行递归:
 
     public static void catalog(String fileName) throws Exception {
 		Path path = new Path(fileName);
@@ -284,6 +284,8 @@ public static void catalog(String fileName) throws Exception {
 		}
 	}
 	catalog("/");
+	
+	listFiles(path, true)这个方法传入一个路径,如果路径为文件夹,且第二个参数为false,则只返回路径下的文件和文件夹,但不会返回子文件夹,当为true时就会把路径下的所有文件和子文件都返回
 ```
 
 
