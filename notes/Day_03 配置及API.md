@@ -88,6 +88,37 @@ c.在windows中配置hadoop的环境变量
 
 ![][10]
 
+## API的JAVA代码
+
+### 创建FileSystem对象
+
+``` java
+    创建FileSystem对象,该对象拥有HDFS的操作的方法
+```
+![][11]
+
+``` java
+Configuration conf = new Configuration();
+FileSystem fileSystem = FileSystem.get(conf);
+```
+### 用FileSystem对象执行方法
+
+#### 在HDFS上新建一个文件夹
+
+``` java
+ public static void creatFolder(String floderName) throws Exception {
+    	Path path = new Path(floderName);
+    	if(fileSystem.exists(path)){
+			System.out.println("文件夹已存在");
+		}else{
+			fileSystem.mkdirs(path);
+		}
+	}
+```
+#### 在
+
+
+
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1507810762679.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507811742712.jpg
@@ -99,4 +130,4 @@ c.在windows中配置hadoop的环境变量
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507815702592.jpg
   [9]: https://www.github.com/wxdsunny/images/raw/master/1507816170804.jpg
   [10]: https://www.github.com/wxdsunny/images/raw/master/1507816259959.jpg
-  [11]: https://www.github.com/wxdsunny/images/raw/master/1507817172792.jpg
+  [11]: https://www.github.com/wxdsunny/images/raw/master/1507817995732.jpg
