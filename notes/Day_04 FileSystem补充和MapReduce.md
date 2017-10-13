@@ -96,10 +96,12 @@ wordCount:
 
 #### job配置
 yarn:
+
 > -  可以并行的运行多个mr作业job
 >  -  则job需要设置名称
 
-当map的输出kv类型和myjob最终的输出kv类型一致,则可以不用配置MapOutput的kv类型,如果不一致则必须要配置
+
+> 当map的输出kv类型和myjob最终的输出kv类型一致,则可以不用配置MapOutput的kv类型,如果不一致则必须要配置
 
 > 设置mrjob处理的数据文件位置
 >  PATH:可以指定一个文件也可以指定一个文件夹
@@ -142,7 +144,7 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 > reduce上的:
 > -  reduce抓取数据,根据key进行合并
 
-数据处理分析:
+### 数据处理分析:
 
 
 
@@ -154,4 +156,4 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
   [2]: https://www.github.com/wxdsunny/images/raw/master/1507858316284.jpg
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507858380078.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507896385839.jpg
-  [5]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507906725866]]]"
+  [5]: https://www.github.com/wxdsunny/images/raw/master/1507906725866.jpg
