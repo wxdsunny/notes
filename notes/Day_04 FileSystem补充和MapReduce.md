@@ -201,7 +201,13 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 	}
 ```
 
-> 
+> - 继承Reducer<Text, NullWritable, Text, NullWritable>类
+> - 泛型:KEYIN, VALUEIN为reduce的输入类型,即map的输出 , KEYOUT, VALUEOUT为reduce的输出类型 ,即聚合后形成的key,value
+> - reduce方法:
+>    1.接收map输出的kv对
+>    2.根据key进行排序分组合并
+>    3.根据values里面的内容进行整合操作
+
 
 
  
