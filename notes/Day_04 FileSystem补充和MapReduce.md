@@ -161,6 +161,25 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 
 ### 数据处理分析:
 
+#### 创建map类
+
+
+``` java
+	public static class DesDumplicateMap extends Mapper<LongWritable, Text, Text, NullWritable>{
+		private String [] infos;
+		private NullWritable oValue = NullWritable.get();
+		private Text oKey = new Text();
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, NullWritable>.Context context)
+				throws IOException, InterruptedException {
+			infos = value.toString().split("\\s");
+			oKey.set(infos[0]);
+			context.write(oKey, oValue);
+		}
+	}
+```
+
+
 
 
 
