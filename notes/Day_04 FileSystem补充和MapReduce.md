@@ -132,6 +132,8 @@ reduce节点:(reduce端)
 
 shuffel:洗牌,混洗(整个mr中效率最低的过程)
 
+![][6]
+
 > map上的:
 > -  两次磁盘IO和一次网络IO为shuffe
 > -  由mr引擎来完成的
@@ -157,3 +159,4 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507858380078.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507896385839.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507906725866.jpg
+  [6]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507907985917]]]"
