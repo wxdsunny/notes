@@ -178,7 +178,7 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 		}
 	}
 ```
-继承Mapper<LongWritable, Text, Text, NullWritable>类
+ - 继承Mapper<LongWritable, Text, Text, NullWritable>类
  - 泛型:
   KEYIN, VALUEIN输入的时候的key,value, KEYOUT, VALUEOUT输出的key,value
 -  map方法:
