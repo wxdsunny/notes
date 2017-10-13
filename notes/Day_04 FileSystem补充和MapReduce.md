@@ -105,6 +105,7 @@ yarn:
 PATH:可以指定一个文件也可以指定一个文件夹
 可以通过多次调用给一个mrjob设置多个处理文件的路径
 
+
 #### map,reduce和shuffel
 
  map节点:(map端)
