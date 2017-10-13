@@ -4,7 +4,19 @@ tags: 新建,模板,小书匠
 grammar_cjkRuby: true
 ---
 
-
+	* [FileSystem补充](#filesystem补充)
+		* [获取FileSystem](#获取filesystem)
+		* [获取用户的家目录](#获取用户的家目录)
+			* [HDFS和Linux的区别:](#hdfs和linux的区别)
+	* [导入项目](#导入项目)
+		* [导入数据库](#导入数据库)
+	* [MapReduce](#mapreduce)
+		* [原理](#原理)
+			* [map和reduce的运行原理](#map和reduce的运行原理)
+			* [wordCount的运行过程](#wordcount的运行过程)
+			* [job配置](#job配置)
+			* [map,reduce和shuffel](#mapreduce和shuffel)
+		* [数据处理分析:](#数据处理分析)
 
 
 ## FileSystem补充
@@ -159,4 +171,4 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
   [3]: https://www.github.com/wxdsunny/images/raw/master/1507858380078.jpg
   [4]: https://www.github.com/wxdsunny/images/raw/master/1507896385839.jpg
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507906725866.jpg
-  [6]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507907985917]]]"
+  [6]: https://www.github.com/wxdsunny/images/raw/master/1507907985917.jpg
