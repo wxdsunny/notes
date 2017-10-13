@@ -178,17 +178,30 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 		}
 	}
 ```
->继承Mapper<LongWritable, Text, Text, NullWritable>类
->泛型:
->  KEYIN, VALUEIN输入的时候的key,value, KEYOUT, VALUEOUT输出的key,value
->  map方法:
->  1.加载由mapreduce来完成,解析,转换,抽取由map方法完成
->  2.文本文件的每一个kv代表着文本为你结案里面的一行数据
->  key:运行第一个字符在该文本文件中的偏移量
->  value:运行的字符串内容
->  context:为mr执行上下文参数,传递执行过程的参数数据
->  3.write方法可以把数据传给reduce
+继承Mapper<LongWritable, Text, Text, NullWritable>类
+ - 泛型:
+  KEYIN, VALUEIN输入的时候的key,value, KEYOUT, VALUEOUT输出的key,value
+-  map方法:
+  1.加载由mapreduce来完成,解析,转换,抽取由map方法完成
+  2.文本文件的每一个kv代表着文本为你结案里面的一行数据
+      -   key:运行第一个字符在该文本文件中的偏移量
+      -  value:运行的字符串内容
+      -   context:为mr执行上下文参数,传递执行过程的参数数据
+      -   
+   3.write方法可以把数据传给reduce
 
+``` java
+public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text, NullWritable>{
+		private final NullWritable oValue = NullWritable.get();
+		@Override
+		protected void reduce(Text key, Iterable<NullWritable> value,
+				Reducer<Text, NullWritable, Text, NullWritable>.Context context) throws IOException, InterruptedException {
+		       context.write(key, oValue);
+		}
+	}
+```
+
+> 
 
 
  
