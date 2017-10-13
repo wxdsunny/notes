@@ -300,7 +300,7 @@ public static void catalog(String fileName) throws Exception {
 	}
 	catalog("/");
 	
-	listFiles(path, true)这个方法传入一个路径,如果路径为文件夹,且第二个参数是false,则只返回路径下的文件和文件夹,但不会返回子文件夹,当为true时就会把路径下的所有文件和子文件都返回.
+	listFiles(path, true)这个方法传入一个路径,如果路径为文件夹,且第二个参数是 false,则只返回路径下的文件和文件夹,但不会返回子文件夹,当为true时就会把路径下的所有文件和子文件都返回.
 	
 ```
 
