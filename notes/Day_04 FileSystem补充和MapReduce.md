@@ -178,8 +178,10 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 		}
 	}
 ```
-
-
+>
+>参数:
+>  KEYIN, VALUEIN输入的时候的key,value, KEYOUT, VALUEOUT输出的key,value
+>  
 
 
 
