@@ -257,9 +257,12 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 
 ![][7]
 
-更换 JRE System library , 换成 jdk 下面的 jre，不要用外面的 jre，因为 jdk 中的 jre 中才有生成秘钥的相关类 
+- 解决办法:
+	-  更换 JRE System library , 换成 jdk 下面的 jre，不要用外面的 jre，因为 jdk 中的 jre 中才有生成秘钥的相关类 
 
+2 . `java.io. EOFException` 
   
+  ![][8]
 
 
 
@@ -274,3 +277,4 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
   [5]: https://www.github.com/wxdsunny/images/raw/master/1507906725866.jpg
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507907985917.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507986646476.jpg
+  [8]: https://www.github.com/wxdsunny/images/raw/master/1507987211261.jpg
