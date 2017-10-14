@@ -190,6 +190,11 @@ shuffel:洗牌,混洗(整个mr中效率最低的过程)
 >       -   
 >    3.write方法可以把数据传给reduce
 
+
+#### 创建reduce类
+
+
+
 ``` java
 public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text, NullWritable>{
 		private final NullWritable oValue = NullWritable.get();
