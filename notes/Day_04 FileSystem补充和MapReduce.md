@@ -236,19 +236,19 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 	}
 ```
 
-- 构建Configuration,用来配置HDFS的位置和mr的各项参数
-- 调用MapReduce包下的Job类,用来作业,用Job.getInstance(conf)
-- 配置作业的类和job的名字,
-- 配置mr执行类map和reduce类
-- 设置输出的kv类型:
-   1.设置map输出的kv类型
-   2.设置reduce输出的kv类型
-   3.当map和reduce的输出类型相同时,可以不用配置mapoutput的kv类型,如果不一致则必须要单独各自设置
-- 设置数据源(待处理的数据)
-- 设置目标数据存储位置
-   1.存储的位置必须是一个目录,而且当前HDFS上不存在这个目录
-   2.一个mrjob只能有一个输出位置
-- 启动job ,分布式计算提交给mr,参数表示是否打印处理过程中输出的日志
+> - 构建Configuration,用来配置HDFS的位置和mr的各项参数
+> - 调用MapReduce包下的Job类,用来作业,用Job.getInstance(conf)
+> - 配置作业的类和job的名字,
+> - 配置mr执行类map和reduce类
+> - 设置输出的kv类型:
+>    1.设置map输出的kv类型
+>    2.设置reduce输出的kv类型
+>    3.当map和reduce的输出类型相同时,可以不用配置mapoutput的kv类型,如果不一致则必须要单独各自设置
+> - 设置数据源(待处理的数据)
+> - 设置目标数据存储位置
+>    1.存储的位置必须是一个目录,而且当前HDFS上不存在这个目录
+>    2.一个mrjob只能有一个输出位置
+> - 启动job ,分布式计算提交给mr,参数表示是否打印处理过程中输出的日志
 
 
 ### 运行中遇到的错误
@@ -257,16 +257,16 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 
 ![][7]
 
-- 解决办法:
-	-  更换 JRE System library , 换成 jdk 下面的 jre，不要用外面的 jre，因为 jdk 中的 jre 中才有生成秘钥的相关类 
+> - 解决办法:
+> 	-  更换 JRE System library , 换成 jdk 下面的 jre，不要用外面的 jre，因为 jdk 中的 jre 中才有生成秘钥的相关类
 
 2 . `java.io. EOFException` 
   
   ![][8]
 
-- 解决办法:
-	- 把仓库中的org/apache/hadoop文件删除,重新导入
-	- 找到相应的jar包删除重新下载
+> - 解决办法:
+> 	- 把仓库中的org/apache/hadoop文件删除,重新导入
+> 	- 找到相应的jar包删除重新下载
 
 3 . `(null) entry in command string :null help`
 
@@ -282,4 +282,4 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507907985917.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507986646476.jpg
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507987211261.jpg
-  [9]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507987563108]]]"
+  [9]: https://www.github.com/wxdsunny/images/raw/master/1507987563107.jpg
