@@ -268,7 +268,9 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 	- 把仓库中的org/apache/hadoop文件删除,重新导入
 	- 找到相应的jar包删除重新下载
 
+3 . `(null) entry in command string :null help`
 
+![][9]
  
 
 
@@ -280,3 +282,4 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
   [6]: https://www.github.com/wxdsunny/images/raw/master/1507907985917.jpg
   [7]: https://www.github.com/wxdsunny/images/raw/master/1507986646476.jpg
   [8]: https://www.github.com/wxdsunny/images/raw/master/1507987211261.jpg
+  [9]: https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1507987563108]]]"
