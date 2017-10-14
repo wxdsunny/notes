@@ -264,7 +264,9 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
   
   ![][8]
 
-
+- 解决办法:
+	- 把仓库中的org/apache/hadoop文件删除,重新导入
+	- 找到相应的jar包删除重新下载
 
 
  
