@@ -215,6 +215,27 @@ public static class DesDumplicateReduce extends Reducer<Text, NullWritable, Text
 >    2.根据key进行排序分组合并
 >    3.根据values里面的内容进行整合操作
 
+#### 创建job类
+
+``` java
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(DesDumplicate.class);
+		job.setJobName("分析系统用户名");
+		job.setMapperClass(DesDumplicateMap.class);
+		job.setReducerClass(DesDumplicateReduce.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(NullWritable.class);
+		Path inputPath = new Path("/user-logs-large.txt");
+		FileInputFormat.addInputPath(job, inputPath);
+		Path outputPath = new Path("/bd14");
+		outputPath.getFileSystem(conf).delete(outputPath, true);
+		FileOutputFormat.setOutputPath(job, outputPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+```
+
 
 
  
