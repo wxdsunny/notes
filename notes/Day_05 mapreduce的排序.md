@@ -32,6 +32,20 @@ grammar_cjkRuby: true
 > - 将随机抽样写入分区文件,在job启动之前启动抽样程序,并将抽样程序得到的中值写入分区文件中
 
 #### 代码
+
+- 自定义的排序
+``` java
+public static class WritableDescComparetor extends IntWritable.Comparator {
+
+		@Override
+		public int compare(byte[] arg0, int arg1, int arg2, byte[] arg3, int arg4, int arg5) {
+			return -super.compare(arg0, arg1, arg2, arg3, arg4, arg5);
+		}
+		
+	}
+```
+
+- 全排序的job
 ``` java
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
@@ -74,7 +88,14 @@ grammar_cjkRuby: true
 		
 	}
 ```
-
+### 二次排序
+#### 原理过程
+- 概念:
+	- 先排序第一个字段,第一个字段相同的时候排序第二个字段
+- 过程:
+	- 将两个字段合并成一个对象,作为key发送到reducer节点上
+	- 在这个对象类型中自定义排序规则,重写compare方法(这个对象类型实现WritableComparable类)
+	- 
 
 抽样,求中值,根据中值定义partition
 
