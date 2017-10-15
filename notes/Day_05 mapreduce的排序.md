@@ -111,7 +111,7 @@ public static class WritableDescComparetor extends IntWritable.Comparator {
 >     - 设置job中的分组比较器为自己定义的
 
 #### 代码:
-	1 . 定义封装类型和排序规则:
+1 . 定义封装类型和排序规则:
 ``` java
 public static class SecondarySortCompareble implements WritableComparable<SecondarySortCompareble>{
 		private String  firstFiled;
