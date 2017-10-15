@@ -1,6 +1,6 @@
 ---
 title: Day_05 mapreduce的排序
-tags: 新建,模板,小书匠
+tags: 全局排序,二次排序,Partitioner
 grammar_cjkRuby: true
 ---
 
