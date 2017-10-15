@@ -40,7 +40,7 @@ grammar_cjkRuby: true
 > 	- SequenceFile在保存数据的同时会保留数据的类型,本身就是以kv方式保存数据的,则解决了KeyValueTextInputFormat的问题
 > - 将随机抽样写入分区文件,在job启动之前启动抽样程序,并将抽样程序得到的中值写入分区文件中
 
-#### 代码
+#### 全局排序代码
 
 - 自定义的排序
 ``` java
@@ -119,7 +119,7 @@ public static class WritableDescComparetor extends IntWritable.Comparator {
 > 		- 在构造方法中向父类传递要比较的数据类型
 >     - 设置job中的分组比较器为自己定义的
 
-#### 代码:
+#### 二次排序代码:
 1 . 定义封装类型和排序规则:
 ``` java
 public static class SecondarySortCompareble implements WritableComparable<SecondarySortCompareble>{
