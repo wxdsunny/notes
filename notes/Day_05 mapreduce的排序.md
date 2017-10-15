@@ -90,24 +90,25 @@ public static class WritableDescComparetor extends IntWritable.Comparator {
 ```
 ### 二次排序
 #### 原理过程
-- 概念:
-	- 先排序第一个字段,第一个字段相同的时候排序第二个字段
-- 过程:
-	- 将两个字段合并成一个对象,作为key发送到reducer节点上
-	- 在这个对象类型中自定义排序规则,重写compare方法(这个对象类型实现WritableComparable类)
-		- 要重写readFields,write,compareTo方法
-		- readFields序列化
-		- write反序列化
-		- 序列化和反序列化的顺序必须保持一致
-		- compareTo比较,在比较方法中实现二次排序
-	- 自定义分区,用来把第一个字段的key值分区到同一个节点上,返回值为数字,根据数据的求余,可以进行比较均衡的分,返回的数字为reduce的标号
-	- 在map中把数据封装到定义的对象类型中
-	- 在reducer中再进行数据的提取
-	- 定义分组比较器,让不同的key值的第一个字段相同的kv调用同一个reduce方法
-		- 继承WritableComparator
-		- 重写compare方法自定义排序规则
-		- 在构造方法中向父类传递要比较的数据类型
-    - 设置job中的分组比较器为自己定义的
+
+> - 概念:
+> 	- 先排序第一个字段,第一个字段相同的时候排序第二个字段
+> - 过程:
+> 	- 将两个字段合并成一个对象,作为key发送到reducer节点上
+> 	- 在这个对象类型中自定义排序规则,重写compare方法(这个对象类型实现WritableComparable类)
+> 		- 要重写readFields,write,compareTo方法
+> 		- readFields序列化
+> 		- write反序列化
+> 		- 序列化和反序列化的顺序必须保持一致
+> 		- compareTo比较,在比较方法中实现二次排序
+> 	- 自定义分区,用来把第一个字段的key值分区到同一个节点上,返回值为数字,根据数据的求余,可以进行比较均衡的分,返回的数字为reduce的标号
+> 	- 在map中把数据封装到定义的对象类型中
+> 	- 在reducer中再进行数据的提取
+> 	- 定义分组比较器,让不同的key值的第一个字段相同的kv调用同一个reduce方法
+> 		- 继承WritableComparator
+> 		- 重写compare方法自定义排序规则
+> 		- 在构造方法中向父类传递要比较的数据类型
+>     - 设置job中的分组比较器为自己定义的
 
 #### 代码:
 	1 . 定义封装类型和排序规则:
