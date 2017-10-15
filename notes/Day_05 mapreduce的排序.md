@@ -109,7 +109,7 @@ public static class WritableDescComparetor extends IntWritable.Comparator {
 		- 在构造方法中向父类传递要比较的数据类型
     - 设置job中的分组比较器为自己定义的
 
--代码:
+#### 代码:
 	1 . 定义封装类型和排序规则:
 ``` java
 public static class SecondarySortCompareble implements WritableComparable<SecondarySortCompareble>{
