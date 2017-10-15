@@ -31,7 +31,7 @@ grammar_cjkRuby: true
 > 	- SequenceFile在保存数据的同时会保留数据的类型,本身就是以kv方式保存数据的,则解决了KeyValueTextInputFormat的问题
 > - 将随机抽样写入分区文件,在job启动之前启动抽样程序,并将抽样程序得到的中值写入分区文件中
 
-####　代码
+#### 代码
 ``` java
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
