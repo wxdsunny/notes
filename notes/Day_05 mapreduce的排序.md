@@ -27,7 +27,7 @@ grammar_cjkRuby: true
 > 	- map端的输入会把文本文件读取成kv对,按照分割符把一行分为两部分,前面为key后面为value
 > 	- 如果分隔符不存在则整行都是key,value为空
 > 	- 默认分隔符为/t,手动指定分隔符参数:mapreduce.input.keyvaluelinerecordreader.key.value.separator
-> 	- 如果用KeyValueTextInputFormat,则参数类型为Text,Text,以文本字符串来存储,则不能满足用数字存储
+> 	- 如果用KeyValueTextInputFormat,则参数类型为Text,Text,以文本字符串来存储,则不能满足用数字排序存储
 > 	- SequenceFile在保存数据的同时会保留数据的类型,本身就是以kv方式保存数据的,则解决了KeyValueTextInputFormat的问题
 > - 将随机抽样写入分区文件,在job启动之前启动抽样程序,并将抽样程序得到的中值写入分区文件中
 
