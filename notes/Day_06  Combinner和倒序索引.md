@@ -5,6 +5,8 @@ grammar_cjkRuby: true
 ---
 
 
+
+## static 修饰的内部类与其他内部类
 - static class 类与普通类区别:
 	- 添加static的话属于静态内部类,和普通类没有多大区别,在使用上可以直接new来实例化对象
 	- 如果不加static的话,内部类的实例化之前要先实例化外部类
