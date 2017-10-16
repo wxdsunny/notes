@@ -62,15 +62,14 @@ Combinner过程:
 
 ### 多分片问题
 
-- 概念 
- 当一个文件有多个block时,一个文件会被分割成多个split,,然后每一个split中都存在一个MapReduce任务,Combiner任务,当不同的map
- 中相同的key到达Reducer中,会发生value值重复且没有做合并的情况
-- 解决
-	- 设置split不分片(目的:解决一个文件可能会有多个分片导致结果错误
-	- 使用范围:文件不宜过大
-	- 自定义InputFormat继承oTextInputFormat(mr引擎默认使用TextInputformat)
-	- 重写isSplitable方法(return false,是关闭分片)
-		- 代码:
+> - 概念   当一个文件有多个block时,一个文件会被分割成多个split,,然后每一个split中都存在一个MapReduce任务,Combiner任务,当不同的map
+> 中相同的key到达Reducer中,会发生value值重复且没有做合并的情况
+> - 解决
+> 	- 设置split不分片(目的:解决一个文件可能会有多个分片导致结果错误
+> 	- 使用范围:文件不宜过大
+> 	- 自定义InputFormat继承oTextInputFormat(mr引擎默认使用TextInputformat)
+> 	- 重写isSplitable方法(return false,是关闭分片)
+> 		- 代码:
 
 
 ``` stylus
@@ -82,7 +81,8 @@ public static class ReversedIndexFormat extends TextInputFormat {
 	}
 ```
  
-   - - 在job中设置自定义Format
+
+>    - - 在job中设置自定义Format
 
 ``` stylus
 job.setInputFormatClass(ReversedIndexFormat.class);
