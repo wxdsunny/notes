@@ -80,7 +80,6 @@ public static class ReversedIndexFormat extends TextInputFormat {
 		}
 	}
 ```
- 
 
 >    - - 在job中设置自定义Format
 
@@ -88,6 +87,134 @@ public static class ReversedIndexFormat extends TextInputFormat {
 job.setInputFormatClass(ReversedIndexFormat.class);
 ```
 
+### 倒序索引代码
+
+``` java
+package com.zhiyou100.mapreduce;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class ReversedIndex {
+	//解决一个文件会可能有两个分片导致结果错误的情况,自定义一个inpuFormat,来定义一个文件只能有一个分片
+	//前提文件不宜过大,否则要另想方法
+	public static class ReversedIndexFormat extends TextInputFormat {
+		@Override
+		protected boolean isSplitable(JobContext context, Path file) {
+			return false;
+		}
+	}
+	//map:加载源文件,解析成单词,单词作为key,文件名作为value输出
+	public static class ReversedIndexMap extends Mapper<LongWritable, Text, Text, Text> {
+		private String [] infos;
+		private String filePath;
+		private Text oKey = new Text();
+		private Text oValue = new Text();
+		private FileSplit fileSplit;
+		//在调用类的时候,只在开始的时候执行一次
+		@Override
+		protected void setup(Mapper<LongWritable, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			//设置文件路径,文件是指该map正在执行处理的数据文件
+			fileSplit = (FileSplit) context.getInputSplit();
+			filePath = fileSplit.getPath().toString();
+		}
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			/*infos = value.toString().split("[\\s,\\:,(,),\",\\.,;,\\*,/+,\\[,\\],#,!,\\-,{,},<,>]");*/
+			//infos = value.toString().split("[\\s,\\:()\"\\.;\\*/+\\[\\]#!\\-{}<>]");
+			infos = value.toString().split("[^a-zA-Z0-9%]");
+			if(infos != null && infos.length > 0){
+				for (String word : infos) {
+					oKey.set(word);
+					oValue.set(filePath);
+					context.write(oKey, oValue);
+				}
+			}
+		}
+		
+	}
+    //combiner:接收map的输出,然后统计出每个key(单词)在该文件中出现的次数
+	//输出key(单词),value(文件名称[单词在该文件中出现的次数])
+	public static class ReversedIndexCombiner extends Reducer<Text, Text, Text, Text> {
+		private int wordCount;
+		private Text oValue = new Text();
+		private String filePath;
+		private boolean isGet ;
+		@Override
+		protected void reduce(Text key, Iterable<Text> values, Reducer<Text, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			wordCount = 0;
+			isGet = false;
+			for (Text path : values) {
+				wordCount += 1;
+				if(!isGet){
+					filePath = path.toString();
+					isGet = true;
+				}
+			}
+			oValue.set(filePath+"["+wordCount+"]");
+			context.write(key, oValue);
+		}
+	}
+	//reducer:接收Combiner的输出,并把相同key(单词)下不同的values(文件名[词频])按字符串串接起来
+	//输出:key(单词),value(文件名[词频]---文件名[词频]----)
+	public static class ReversedIndexReducer extends Reducer<Text, Text, Text, Text> {
+		private StringBuilder valueStr;
+		private Text oValue = new Text();
+		private boolean isInitlized = false;
+		@Override
+		protected void reduce(Text key, Iterable<Text> values, Reducer<Text, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			valueStr = new StringBuilder();
+			for (Text value : values) {
+				if(isInitlized){
+					valueStr.append("-----"+value.toString());
+				}else{
+					//第一次往valueStr放内容
+					valueStr.append(value.toString());
+					isInitlized = true;
+				}
+			}
+			oValue.set(valueStr.toString());
+			context.write(key, oValue);
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(ReversedIndex.class);
+		job.setJobName("倒序索引");
+		job.setMapperClass(ReversedIndexMap.class);
+		job.setCombinerClass(ReversedIndexCombiner.class);
+		job.setReducerClass(ReversedIndexReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		Path inPath = new Path("/reversetext");
+		Path outPath = new Path("/bd14/reversetext");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileInputFormat.addInputPath(job, inPath);
+		FileOutputFormat.setOutputPath(job, outPath);
+		job.setNumReduceTasks(2);
+		job.setInputFormatClass(ReversedIndexFormat.class);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+
+```
 
 ## wordcount的topN问题
 - 按照顺序计算出词频前三的数据
