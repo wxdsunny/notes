@@ -228,5 +228,14 @@ public static void main(String[] args) throws Exception {
 
 ![][1]
 
+这个错误的原因是由于自定义的分组比较器中没有给构造方法里面传递比较器要比较的数据类型,即
+
+``` java
+public SecondarySortGroupComparator(){
+			super(SecondarySortCompareble.class,true);
+		}
+```
+这个构造方法没有写
+
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1508116761391.jpg
