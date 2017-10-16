@@ -217,19 +217,20 @@ public class ReversedIndex {
 ```
 
 ## wordcount的topN问题
-- 按照顺序计算出词频前三的数据
-	- 1.第一个mr计算词频,第二个mr只取前三输出,用两个mr
-	- 2.统计词频,根据词频取TopN,只用一个mr
-		- map端加载数据,分析数据,再用compare进行聚合,发送给Reducer
-		- Reducer接收map发送的数据,按照key进行聚合
-		- 在Reducer上开辟一块内存空间,用来存储map解析放入词频,把单词作为key,单词的出现次数作为value
-		-  要保证只有一个Reducer节点,则上述方法会造成内存溢出问题
-     - 3 解决内存问题
-		 - map 中只放三个,可以用treemap
-		 - 开辟一块内存空间,只保存三个数据
-		 - 在每个map上分别取TopN(用Combiner来实现)
-	 - 4 重写reducer的cleanup方法
-	 - 5 遍历treemap,输出kv
+
+> - 按照顺序计算出词频前三的数据
+> 	- 1.第一个mr计算词频,第二个mr只取前三输出,用两个mr
+> 	- 2.统计词频,根据词频取TopN,只用一个mr
+> 		- map端加载数据,分析数据,再用compare进行聚合,发送给Reducer
+> 		- Reducer接收map发送的数据,按照key进行聚合
+> 		- 在Reducer上开辟一块内存空间,用来存储map解析放入词频,把单词作为key,单词的出现次数作为value
+> 		-  要保证只有一个Reducer节点,则上述方法会造成内存溢出问题
+>      - 3 解决内存问题
+> 		 - map 中只放三个,可以用treemap
+> 		 - 开辟一块内存空间,只保存三个数据
+> 		 - 在每个map上分别取TopN(用Combiner来实现)
+> 	 - 4 重写reducer的cleanup方法
+> 	 - 5 遍历treemap,输出kv
 
 ``` java
 package com.zhiyou100.mapreduce;
