@@ -34,16 +34,16 @@ Combinner过程:
     - 通过在mr中添加Combinner的方式给mr配置map端聚合
 		- Combinner类型是Reducer
 		- Combinner的reducer方法定义就是map聚合的方法
-		- Combinner这个Reduce是在map节点上来完成的,只计算map端上面的数据
+		- Combinner这个Reduce是在map节点发送到Reducer之前来完成的,只计算map端上面的数据
 		- 真正的Reducer是在独立的Reducer节点上计算的,从每一个map抓取数据过来一同计算
     - 设置Combinner
 		- job.setCombinerClass(SomeCombinerClass.class)
     - 在mr中可以使用Combinner就最好使用
-    - 在溢写之后
+    - 在溢写之后执行
     - 不适合使用Combinner场景:
 		- 1.计算平均值,期望,方差等计算过程不适合使用
 		- 2.Combinner的输入kv类型和输出kv类型必须保持一致,在计算不支持这种方式的情况下不适用
-    - 当Reducer的输入类型和输出类型一致时,一般会把Reducer直接当作Combinner,设置IntWritable为1,这样就会便于计算统计
+    - 当Reducer的输入类型和输出类型一致,并且算法相同时,一般会把Reducer直接当作Combinner,设置IntWritable为1,这样就会便于计算统计
 
 
 ## 倒排索引(目的:搜索和检查)
