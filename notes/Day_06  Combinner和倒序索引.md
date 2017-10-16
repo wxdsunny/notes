@@ -1,6 +1,6 @@
 ---
 title: Day_06  Combinner和倒序索引
-tags: 新建,模板,小书匠
+tags:Combiner,InputFormat,多分片
 grammar_cjkRuby: true
 ---
 -
