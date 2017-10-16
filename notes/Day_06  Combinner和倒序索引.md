@@ -220,7 +220,7 @@ public class ReversedIndex {
 - 按照顺序计算出词频前三的数据
 	- 1.第一个mr计算词频,第二个mr只取前三输出,用两个mr
 	- 2.统计词频,根据词频取TopN,只用一个mr
-		- map端加载数据,分析数据,发送给Reducer
+		- map端加载数据,分析数据,再用compare进行聚合,发送给Reducer
 		- Reducer接收map发送的数据,按照key进行聚合
 		- 在Reducer上开辟一块内存空间,用来存储map解析放入词频,把单词作为key,单词的出现次数作为value
 		-  要保证只有一个Reducer节点,则上述方法会造成内存溢出问题
@@ -228,6 +228,114 @@ public class ReversedIndex {
 		 - map 中只放三个,可以用treemap
 		 - 开辟一块内存空间,只保存三个数据
 		 - 在每个map上分别取TopN(用Combiner来实现)
+	 - 4 重写reducer的cleanup方法
+	 - 5 遍历treemap,输出kv
+
+``` java
+package com.zhiyou100.mapreduce;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCountTopN {
+
+	public static class WordCountTopNMap extends Mapper<LongWritable, Text, Text, IntWritable> {
+		private final IntWritable ONE = new IntWritable(1);
+		private Text okey = new Text();
+		private String [] infos;
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			infos = value.toString().split("\\s");
+			for (String word : infos) {
+				okey.set(word);
+				context.write(okey, ONE);
+			}
+		}
+	}
+	public static class WordCountTopNReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+		private int sum;
+		private Text okey = new Text();
+		private IntWritable ovalue = new IntWritable();
+		//开辟内存空间保存TopN
+		//treeMap是一个排序的map,按照key进行排序
+		private TreeMap<Integer, String> topN = new TreeMap<>();
+		@Override
+		protected void reduce(Text key, Iterable<IntWritable> values,
+				Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
+			sum = 0;
+			for (IntWritable value : values) {
+				sum += value.get();
+			}
+			//把计算结果放入topN中,如果TopN中不满N个元素的话可以直接往里面放,还需要
+			//先看TopN中有没有相同的key 如果有的话就把TopN中相同的key对应的value和单词串一起,如果没有就直接放进去
+			if(topN.size() < 3){
+				if(topN.get(sum)!=null){
+					topN.put(sum, topN.get(sum)+"---"+key.toString());
+				}else{
+					topN.put(sum, key.toString());
+				}
+			}else{
+				//大于等于N 的话放进去一个,然后再删除一个,始终保持TopN中有N个元素
+				if(topN.get(sum)!=null){
+					topN.put(sum, topN.get(sum)+"---"+key.toString());
+					//因为有同key,是归并操作,因此没增也不用删
+				}else{
+					topN.put(sum, key.toString());
+					//topN.remove(topN.lastKey());
+					topN.remove(topN.firstKey());
+				}
+			}
+			//放进去后treeMap会自动排序,这时把最后一个再给删掉,保证TopN中只有N个kv对
+		}
+		@Override
+		protected void cleanup(Reducer<Text, IntWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			if(topN != null && !topN.isEmpty()){
+				//求最小的前N
+				//Set<Integer> keys = topN.keySet();
+				//求最大的前N
+				Set<Integer> keys = topN.descendingKeySet();
+				for (Integer key : keys) {
+					okey.set(topN.get(key));
+					ovalue.set(key);
+					context.write(okey,ovalue);
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(WordCountTopN.class);
+		job.setJobName("词频topN");
+		job.setMapperClass(WordCountTopNMap.class);
+		job.setCombinerClass(WordCountTopNReducer.class);
+		job.setReducerClass(WordCountTopNReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		Path inPath = new Path("/reversetext/reverse1.txt");
+		Path outPath = new Path("/bd14/topN");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileInputFormat.addInputPath(job, inPath);
+		FileOutputFormat.setOutputPath(job, outPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+```
+
 
 
 
