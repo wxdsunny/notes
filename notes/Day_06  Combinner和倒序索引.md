@@ -3,7 +3,16 @@ title: Day_06  Combinner和倒序索引
 tags: 新建,模板,小书匠
 grammar_cjkRuby: true
 ---
-
+-
+	* [static 修饰的内部类与其他内部类](#static-修饰的内部类与其他内部类)
+	* [Map或reduce的成员变量](#map或reduce的成员变量)
+	* [Combinner的过程和作用](#combinner的过程和作用)
+	* [倒排索引(目的:搜索和检查)](#倒排索引目的搜索和检查)
+		* [倒排索引原理](#倒排索引原理)
+		* [多分片问题](#多分片问题)
+		* [倒序索引代码](#倒序索引代码)
+	* [wordcount的topN问题](#wordcount的topn问题)
+		* [topN代码](#topn代码)
 
 
 ## static 修饰的内部类与其他内部类
@@ -232,6 +241,7 @@ public class ReversedIndex {
 > 	 - 4 重写reducer的cleanup方法
 > 	 - 5 遍历treemap,输出kv
 
+### topN代码
 ``` java
 package com.zhiyou100.mapreduce;
 
