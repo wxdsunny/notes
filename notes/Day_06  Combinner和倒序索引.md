@@ -1,6 +1,6 @@
 ---
 title: Day_06  Combinner和倒序索引
-tags:Combiner,InputFormat,多分片
+tags: Combiner,InputFormat,多分片
 grammar_cjkRuby: true
 ---
 -
