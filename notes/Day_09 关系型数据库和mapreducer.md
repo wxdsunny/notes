@@ -6,8 +6,9 @@ grammar_cjkRuby: true
 
 
 ## sequenceFile avrofile
-当mr读写的数据内容比较复杂,字段比较多的时候,用avrofile
-数据内容比较简单,只有两个字段,用sequenceFile
+
+> 当mr读写的数据内容比较复杂,字段比较多的时候,用avrofile
+> 数据内容比较简单,只有两个字段,用sequenceFile
 
 ## 关系型数据库连接
 ### 大数据平台:hoddop
