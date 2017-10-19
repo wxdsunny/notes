@@ -11,7 +11,7 @@ grammar_cjkRuby: true
 > 数据内容比较简单,只有两个字段,用sequenceFile
 
 ## 关系型数据库连接
-### 大数据平台:hoddop
+### 大数据平台:hadoop
 
 > - 存储:hdfs
 > - 处理:
