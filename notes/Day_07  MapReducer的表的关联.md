@@ -161,13 +161,466 @@ public class MRChain {
 
 ![][4]
 
-宽表
+### 三种关联代码
+#### map关联代码:
 
-- DistributedCache:
-	- 是分布式缓存的一种实现
-	- 
+``` java
+package com.zhiyou100.bd14;
 
-半关联:
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+//计算每个省份的用户对系统的访问次数
+public class MapJoin {
+	//Map读取分布式缓存文件,把它加载到一个hashmap中关联字段作为key,计算相关字段作为value
+	//map方法中处理大表数据,每处理一条就取出相关字段,看hashmap中是否存在,存在代表可以关联,不存在代表不能关联
+	public static class MapJoinMap extends Mapper<LongWritable, Text, Text, IntWritable> {
+		private String[] infos;
+		private Text outKey = new Text();
+		private IntWritable outValue = new IntWritable(1);
+		private Map<String, String> userInfos = new HashMap<>();
+		@Override
+		protected void setup(Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			//获取分布式缓存文件的路径
+			//把小表的内容放到map端的
+			URI[] cacheFiles = context.getCacheFiles();
+			FileSystem fileSystem = FileSystem.get(context.getConfiguration());
+			for (URI uri : cacheFiles) {
+				if(uri.toString().contains("user_info.txt")){
+					FSDataInputStream inputStream = fileSystem.open(new Path(uri));
+					InputStreamReader inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
+					BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+					String readLine = bufferedReader.readLine();
+					while(readLine != null){
+						infos = readLine.split("\\s");
+						userInfos.put(infos[0], infos[2]);
+						readLine = bufferedReader.readLine();
+					}
+				}
+			}
+		}
+
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			infos = value.toString().split("\\s");
+			if(userInfos.containsKey(infos[0])){
+				outKey.set(userInfos.get(infos[0]));
+				context.write(outKey, outValue);
+			}
+		}
+	}
+	public static class MapJoinReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+		private int sum;
+		private IntWritable oValue = new IntWritable();
+		@Override
+		protected void reduce(Text key, Iterable<IntWritable> values,
+				Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
+			sum = 0;
+			for (IntWritable value : values) {
+				sum += value.get();
+			}
+			oValue.set(sum);
+			context.write(key, oValue);
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(MapJoin.class);
+		job.setJobName("map表关联");
+		job.setMapperClass(MapJoinMap.class);
+		job.setReducerClass(MapJoinReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		//设置分布式缓存文件(小表)
+		Path cachePath = new Path("/user_info.txt");
+		job.addCacheFile(cachePath.toUri());
+		//大表
+		Path inPath = new Path("/user-logs-large.txt");
+		Path outPath = new Path("/bd14/user/userinfo/mapJoin");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileInputFormat.addInputPath(job, inPath);
+		FileOutputFormat.setOutputPath(job, outPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+
+```
+#### Reducer关联代码
+
+``` java
+package com.zhiyou100.bd14;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+//计算每个省份的用户对系统的访问次数
+public class ReducerJoin {
+	//保存value同时打标签
+	public static class ValueWritable implements Writable{
+		private String value;
+		private String flag;
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
+		public String getFlag() {
+			return flag;
+		}
+		public void setFlag(String flag) {
+			this.flag = flag;
+		}
+		@Override
+		public void write(DataOutput out) throws IOException {
+			out.writeUTF(value);
+			out.writeUTF(flag);
+		}
+		@Override
+		public void readFields(DataInput in) throws IOException {
+			this.value = in.readUTF();
+			this.flag = in.readUTF();
+		}
+	}
+	//读取两个文件,根据来源把每一个kv对打上标签输出给reducer,key必须是关联字段
+	public static class ReducerJoinMap extends Mapper<LongWritable, Text, Text, ValueWritable> {
+		private String[] infos;
+		private String fileName;
+		private FileSplit inputSplit;
+		private Text outKey = new Text();
+		private ValueWritable outValue = new ValueWritable();
+		@Override
+		protected void setup(Mapper<LongWritable, Text, Text, ValueWritable>.Context context)
+				throws IOException, InterruptedException {
+			inputSplit = (FileSplit)context.getInputSplit();
+			if(inputSplit.getPath().toString().contains("user-logs-large.txt")){
+				fileName = "userLogsLarge";
+			}else if(inputSplit.getPath().toString().contains("user_info.txt")){
+				fileName = "userInfo";
+			}
+		}
+		@Override
+		protected void map(LongWritable key, Text value,
+				Mapper<LongWritable, Text, Text, ValueWritable>.Context context)
+				throws IOException, InterruptedException {
+			outValue.setFlag(fileName);
+			infos = value.toString().split("\\s");
+			if(fileName.equals("userLogsLarge")){
+				//解析user-logs-large.txt的过程(用户名,行为类型,ip地址)
+				outKey.set(infos[0]);
+				outValue.setValue(infos[1]+"\t"+infos[2]);
+			}else if(fileName.equals("userInfo")){
+				//解析user-info.txt的过程(用户名,性别,省份)
+				outKey.set(infos[0]);
+				outValue.setValue(infos[1]+"\t"+infos[2]);
+			}
+			context.write(outKey, outValue);
+		}
+	}
+	//接收map发来的kv,根据value中的flag来把同一个key对应的value分成两组
+	//那么两组中的数据就是分别来自两个表中的数据,对这两组数据笛卡尔乘积即完成关联
+	public static class ReducerJoinReducer extends Reducer<Text, ValueWritable, Text, Text> {
+		private List<String> userLogsLargeList;
+		private List<String> userInfoList;
+		private Text oValue = new Text();
+		@Override
+		protected void reduce(Text key, Iterable<ValueWritable> values,
+				Reducer<Text, ValueWritable, Text, Text>.Context context) throws IOException, InterruptedException {
+			userLogsLargeList = new ArrayList<>();
+			userInfoList = new ArrayList<>();
+			for (ValueWritable value : values) {
+				if(value.getFlag().equals("userLogsLarge")){
+					userLogsLargeList.add(value.getValue());
+				}else if(value.getFlag().equals("userInfo")){
+					userInfoList.add(value.getValue());
+				}
+			}
+			//对两组数据中的数据进行笛卡尔乘积
+			for(String userLogsLarge : userLogsLargeList){
+				for(String userInfo : userInfoList){
+					oValue.set(userLogsLarge+"\t"+userInfo);
+					context.write(key, oValue);
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(ReducerJoin.class);
+		job.setJobName("reducer的表关联");
+		job.setMapperClass(ReducerJoinMap.class);
+		job.setReducerClass(ReducerJoinReducer.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(ValueWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		FileInputFormat.addInputPath(job, new Path("/user_info.txt"));
+		FileInputFormat.addInputPath(job, new Path("/user-logs-large.txt"));
+		Path outPath = new Path("/bd14/user/userinfo/reducerJoin");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileOutputFormat.setOutputPath(job, outPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+
+```
+#### 半连接代码
+
+生成缓存文件
+
+``` java
+package com.zhiyou100.bd14;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class SemiJoin {
+	public static class SemiJoinMap extends Mapper<LongWritable, Text, Text, NullWritable> {
+		private String[] infos;
+		private Text oKey = new Text();
+		private NullWritable oValue = NullWritable.get();
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, NullWritable>.Context context)
+				throws IOException, InterruptedException {
+			infos = value.toString().split("\\s");
+			oKey.set(infos[0]);
+			context.write(oKey, oValue);
+		}
+	}
+	public static class SemiJoinReducer extends Reducer<Text, NullWritable, Text, NullWritable> {
+		private NullWritable oValue = NullWritable.get();
+		@Override
+		protected void reduce(Text key, Iterable<NullWritable> values,
+				Reducer<Text, NullWritable, Text, NullWritable>.Context context) throws IOException, InterruptedException {
+			context.write(key, oValue);
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(SemiJoin.class);
+		job.setJobName("半关联第一个文件");
+		job.setMapperClass(SemiJoinMap.class);
+		job.setReducerClass(SemiJoinReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(NullWritable.class);
+		FileInputFormat.addInputPath(job, new Path("/user-logs-large.txt"));
+		Path outPath = new Path("/bd14/user/userinfo/semijoin1");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileOutputFormat.setOutputPath(job, outPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+
+```
+
+排除与缓存文件中不一致的,再得出一致的笛卡尔集
+
+``` java
+package com.zhiyou100.bd14;
+
+import java.io.BufferedReader;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class SemiJoinTwo {
+	public static class ValueSemin implements Writable {
+		private String value;
+		private String flag;
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public String getFlag() {
+			return flag;
+		}
+
+		public void setFlag(String flag) {
+			this.flag = flag;
+		}
+
+		@Override
+		public void write(DataOutput out) throws IOException {
+			out.writeUTF(value);
+			out.writeUTF(flag);
+		}
+
+		@Override
+		public void readFields(DataInput in) throws IOException {
+			this.value = in.readUTF();
+			this.flag = in.readUTF();
+		}
+	}
+	public static class SemiJoinTwoMap extends Mapper<LongWritable, Text, Text, ValueSemin>{
+		private String[] infos;
+		private Text oKey = new Text();
+		private ValueSemin oValue = new ValueSemin();
+		private String fileName;
+		private List<String> keyList = new ArrayList<>();
+		private FileSplit inputSplit;
+		@Override
+		protected void setup(Mapper<LongWritable, Text, Text, ValueSemin>.Context context)
+				throws IOException, InterruptedException {
+			URI[] cacheFiles = context.getCacheFiles();
+			FileSystem fileSystem = FileSystem.get(context.getConfiguration());
+			for (URI uri : cacheFiles) {
+				if(uri.getPath().toString().contains("part-r-00000")){
+					FSDataInputStream fsDataInputStream = fileSystem.open(new Path(uri));
+					InputStreamReader inputStreamReader = new InputStreamReader(fsDataInputStream);
+					BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+					String readLine = bufferedReader.readLine();
+					while(readLine != null){
+						keyList.add(readLine);
+						readLine = bufferedReader.readLine();
+					}
+				}
+			}
+			inputSplit = (FileSplit)context.getInputSplit();
+			if(inputSplit.getPath().toString().contains("user-logs-large.txt")){
+				fileName = "userLogsLarge";
+			}else if(inputSplit.getPath().toString().contains("user_info.txt")){
+				fileName = "userInfo";
+			}
+		}
+		@Override
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, ValueSemin>.Context context)
+				throws IOException, InterruptedException {
+			infos = value.toString().split("\\s");
+			if(keyList.contains(infos[0])){
+				if(fileName.equals("userLogsLarge")){
+					oKey.set(infos[0]);
+					oValue.setFlag(fileName);
+					oValue.setValue(infos[1]+"\t"+infos[2]);
+				}else if(fileName.equals("userInfo")){
+					oKey.set(infos[0]);
+					oValue.setFlag(fileName);
+					oValue.setValue(infos[1]+"\t"+infos[2]);
+				}
+				context.write(oKey, oValue);
+			}
+		}
+		
+	}
+	public static class SemiJoinTwoReducer extends Reducer<Text, ValueSemin, Text, Text>  {
+		private List<String> userLogsLargeList;
+		private List<String> userInfoList;
+		private Text oValue = new Text();
+		@Override
+		protected void reduce(Text key, Iterable<ValueSemin> values, Reducer<Text, ValueSemin, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			userLogsLargeList = new ArrayList<>();
+			userInfoList = new ArrayList<>();
+			for (ValueSemin value : values) {
+				if(value.getFlag().contains("userLogsLarge")){
+					userLogsLargeList.add(value.getValue());
+				}else if(value.getFlag().contains("userInfo")){
+					userInfoList.add(value.getValue());
+				}
+			}
+			for(String LogsLarge : userLogsLargeList){
+				for(String Info : userInfoList){
+					oValue.set(LogsLarge+"\t"+Info);
+					context.write(key, oValue);
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(SemiJoinTwoMap.class);
+		job.setJobName("半关联");
+		job.setMapperClass(SemiJoinTwoMap.class);
+		job.setReducerClass(SemiJoinTwoReducer.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(ValueSemin.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		job.addCacheFile((new Path("/bd14/user/userinfo/semijoin1/part-r-00000")).toUri());
+		FileInputFormat.addInputPath(job, new Path("/user_info.txt"));
+		FileInputFormat.addInputPath(job, new Path("/user-logs-large.txt"));
+		Path outPath = new Path("/bd14/user/userinfo/semijoin2");
+		outPath.getFileSystem(conf).delete(outPath, true);
+		FileOutputFormat.setOutputPath(job, outPath);
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+
+```
+
+
+
+
 
 
   [1]: https://www.github.com/wxdsunny/images/raw/master/1508210695843.jpg
