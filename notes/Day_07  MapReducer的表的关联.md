@@ -7,10 +7,7 @@ grammar_cjkRuby: true
 
 数据倾斜:
 数据里面的某个key值的数据远远大于其他key的数据量
-
 在job中定义的key或者value 的值与map或者reducer的不对应
-
-![][1]
 
 Combiner的执行位置在map节点,把数据写在map本地,和Reducer不一样
 
@@ -63,5 +60,4 @@ chainredu对应的reduce端
 
 
 
-  [1]: https://www.github.com/wxdsunny/images/raw/master/1508209479993.jpg
   [2]: https://www.github.com/wxdsunny/images/raw/master/1508210695843.jpg
