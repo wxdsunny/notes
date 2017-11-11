@@ -4,11 +4,6 @@ tags: 新建,模板,小书匠
 grammar_cjkRuby: true
 ---
 
----
-title: Day_12 hive
-tags: 新建,模板,小书匠
-grammar_cjkRuby: true
----
 
 
 # Hive 优化
