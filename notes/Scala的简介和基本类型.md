@@ -218,6 +218,9 @@ object ForTest {
 }
 
 ```
+- acala里面没有break ,也没有contiue
+	- 但是可以用特殊类型Breaks来实现break
+	- 通过return 终止整个函数的方式也可以终结循环
 
 ### 12.Unit类型
 
