@@ -53,7 +53,9 @@ scala是spark的原生语言
 > - scala中运算符不是语法,而是函数(对象)
 > - a+b 等同于 a.+(b)
 > 	- 前者是后者的简写
-> 	- 当一个对象通过点调用其方法的时候,如果该方法只有一个参数,name点号可以省略,小括号可以省略,对象,方法,参数之间用空格隔开即可 	https://www.scala-lang.org/api/current/scala/Int.html
+> 	- 当一个对象通过点调用其方法的时候,如果该方法只有一个参数,name点号可以省略,小括号可以省略,对象,方法,参数之间用空格隔开即可 	
+> 	- 如果方法有多个参数,那么点号可以省略,但是小括号不能省略
+> 	https://www.scala-lang.org/api/current/scala/Int.html
 > 
 > - "=="在scala等同于equal方法
 >  val a = new String("abc")  val b = new
@@ -76,7 +78,7 @@ scala是spark的原生语言
 > 		- scala中的语句块除了划分作用域之外还可以带返回值
 
 ## scala的控制结构
-### 10.if...else..
+### 9.if...else..
 #### 与java中的if else区别
 > scala中的if else语法是有返回值的,因此可以在变量的赋值上使用if else 语法,另外scala中没有三目运算表达式
 
@@ -113,7 +115,7 @@ object IfTest1 {
 }
 ```
 
-### 11.while循环
+### 10.while循环
 
 >  语句块中没有返回值  
 >  
@@ -139,7 +141,7 @@ object WhileTest {
 }
 ```
 
-### 12.for循环
+### 11.for循环
 
 > - for也是scala中少数没有返回值的语句块之一
 > - 但是scala中也提供了一种方式(yield)让其具有返回能力
@@ -217,7 +219,7 @@ object ForTest {
 
 ```
 
-### 13.Unit类型
+### 12.Unit类型
 
 > - java 里无返回值的方法是void
 > - scala中没有void,它使用Unit类型来代替
